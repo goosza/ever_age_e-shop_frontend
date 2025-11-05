@@ -1,0 +1,128 @@
+.collabs-section {
+  position: relative;
+  width: 100%;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Видео-фон */
+.collabs-video-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.collabs-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease;
+  transform: scale(1.05);
+  filter: saturate(0.95) contrast(1) brightness(0.9);
+  pointer-events: none;
+}
+
+.collabs-video.active {
+  opacity: 1;
+}
+
+/* мягкий затемняющий/цветовой слой поверх видео чтобы текст был читаем */
+.collabs-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45));
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Контент поверх видео */
+.collabs-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6vh 2rem;
+}
+
+.collabs-center {
+  display: flex;
+  gap: 2.2rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* кнопки-элементы коллаборации (большой текст по середине) */
+.collab-item {
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  outline: none;
+  display: inline-block;
+  min-width: 160px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+}
+
+.collab-text {
+  font-size: 2.1rem;
+  letter-spacing: 0.12rem;
+  font-weight: 700;
+  z-index: 3;
+  mix-blend-mode: difference; /* помогает на некоторых фонах; можно убрать */
+  transition: transform .25s ease;
+}
+
+.collab-item:focus .collab-text,
+.collab-item:hover .collab-text {
+  transform: translateY(-6px);
+}
+
+/* изображение, показываемое за текстом при hover */
+.collab-hover-image {
+  position: absolute;
+  inset: auto;
+  width: 420px;
+  height: 260px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  opacity: 0;
+  transition: opacity 300ms ease, transform 300ms ease, filter 300ms ease;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.45);
+  filter: saturate(1.05) contrast(1.02) blur(0px);
+}
+
+/* видимая картинка */
+.collab-hover-image.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  filter: saturate(1.1) contrast(1.06) blur(0px);
+}
+
+/* адаптив */
+@media (max-width: 800px) {
+  .collab-text { font-size: 1.3rem; }
+  .collab-hover-image { width: 260px; height: 160px; }
+  .collab-item { height: 110px; min-width: 120px; }
+}

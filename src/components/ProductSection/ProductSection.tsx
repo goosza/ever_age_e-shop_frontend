@@ -18,7 +18,7 @@ export const ProductsSection: React.FC = () => {
   return (
     <section id="products" className="products-section">
       <div className="products-inner">
-        <h2 className="products-title">Товары</h2>
+        <h2 className="products-title">Products</h2>
         <div className="products-grid">
           {SAMPLE_PRODUCTS.map((p) => (
             <article key={p.id} className="product-card">
