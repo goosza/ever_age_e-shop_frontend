@@ -1,0 +1,116 @@
+/* ...existing code... */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 64px;
+  display: grid;
+  grid-template-columns: 160px 1fr 160px; /* левое, центр, правое */
+  align-items: center;
+  padding: 0 16px;
+  background: transparent;
+  border-bottom: none;
+  z-index: 1000;
+  box-sizing: border-box;
+  transition: background-color 220ms ease, box-shadow 220ms ease, border-bottom 220ms ease, color 220ms ease;
+}
+
+/* состояние у вершины страницы (hero) */
+.app-header.transparent {
+  background: transparent;
+  border-bottom: none;
+  box-shadow: none;
+  color: #fff; /* светлый текст/иконки на геро-секции */
+}
+
+/* состояние после скролла */
+.app-header.scrolled {
+  background: #fff;
+  border-bottom: 1px solid #e6e6e6;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  color: #111; /* тёмный текст/иконки после скролла */
+}
+
+/* левый / центр / право */
+.header-left { display: flex; align-items: center; justify-content: flex-start; padding-left: 8px; }
+.header-center { display: flex; align-items: center; justify-content: center; }
+.header-right { display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; }
+
+/* логотип — увеличен примерно на 50% */
+.header-logo {
+  height: 54px;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.95;
+  transition: height 220ms ease, opacity 220ms ease;
+}
+
+/* INFO кнопка */
+.info-button {
+  background: transparent;
+  padding: 6px 10px;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid transparent;
+}
+.app-header.scrolled .info-button { border-color: #ddd; color: #111;}
+
+/* минималистичная иконка корзины (тонкие линии) */
+.cart-button {
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+}
+.cart-svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  opacity: 0.95;
+}
+
+/* бейдж количества */
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #e53935;
+  color: #fff;
+  font-size: 12px;
+  padding: 2px 6px;
+}
+
+/* popup */
+.cart-popup {
+  position: absolute;
+  right: 8px;
+  top: calc(100% + 8px);
+  width: 320px;
+  max-height: 400px;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  padding: 8px;
+}
+
+/* строки в корзине */
+.cart-row { display:flex; gap:8px; align-items:center; padding:8px; border-bottom:1px solid #f3f3f3; }
+.cart-thumb { width:48px; height:48px; object-fit:cover; border-radius:4px; }
+.cart-info { display:flex; flex-direction:column; gap:4px; }
+.cart-title { font-weight:600; font-size:14px; }
+.cart-meta { font-size:13px; color:#666; }
+.cart-remove { margin-left:auto; background:#ef5350; color:#fff; border:none; padding:6px 8px; border-radius:6px; cursor:pointer; }
+.cart-empty { padding:16px; text-align:center; color:#666; }
+/* ...existing code... */
