@@ -5,8 +5,8 @@ import "./Collaborations.css";
 type Collab = {
   id: string;
   title: string;
-  hoverImage: string; // path in public folder, e.g. /collabs/img1.jpg
-  href?: string; // optional external link
+  hoverImage: string;
+  href?: string;
 };
 
 export const Collaborations: React.FC = () => {
@@ -14,54 +14,36 @@ export const Collaborations: React.FC = () => {
 
   const collabs: Collab[] = useMemo(
     () => [
-      { id: "alpha", title: "ALPHA", hoverImage: "/collabs/alpha.jpg", href: "/collaboration/alpha" },
-      { id: "beta", title: "BETA", hoverImage: "/collabs/beta.jpg", href: "/collaboration/beta" },
-      { id: "gamma", title: "GAMMA", hoverImage: "/collabs/gamma.jpg", href: "/collaboration/gamma" },
+      { id: "alpha", title: "ALPHA", hoverImage: "../../public/alpha.gif", href: "/collaboration/alpha" },
+      { id: "beta", title: "BETA", hoverImage: "../../public/beta.png", href: "/collaboration/beta" },
+      { id: "gamma", title: "GAMMA", hoverImage: "../../public/gamma.png", href: "/collaboration/gamma" },
+      { id: "delta", title: "DELTA", hoverImage: "../../public/delta.png", href: "/collaboration/delta" },
     ],
     []
   );
 
-  // Видео-файлы (положите в public/videos/)
-  const videos = useMemo(
-    () => ["/videos/bg-01.mp4", "/videos/bg-02.mp4", "/videos/bg-03.mp4"],
-    []
-  );
-
+  const videos = useMemo(() => ["/videos/bg-01.mp4", "/videos/bg-02.mp4", "/videos/bg-03.mp4"], []);
   const [hovered, setHovered] = useState<string | null>(null);
   const [activeVideo, setActiveVideo] = useState(0);
 
-  // цикл видео
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveVideo((s) => (s + 1) % videos.length);
-    }, 8000); // каждые 8с — смена (подберите по длине роликов)
+    const interval = setInterval(() => setActiveVideo((s) => (s + 1) % videos.length), 8000);
     return () => clearInterval(interval);
   }, [videos.length]);
 
-  // Навигация при клике (используем internal href, если внешний — window.open)
   const onClick = (c: Collab) => {
     if (!c.href) return;
-    if (c.href.startsWith("http")) {
-      window.open(c.href, "_blank");
-    } else {
-      navigate(c.href);
-    }
+    if (c.href.startsWith("http")) window.open(c.href, "_blank");
+    else navigate(c.href);
   };
+
+  const currentImage = hovered ? collabs.find((c) => c.id === hovered)?.hoverImage : undefined;
 
   return (
     <section className="collabs-section" aria-label="Collaborations">
       <div className="collabs-video-wrap" aria-hidden>
         {videos.map((src, i) => (
-          <video
-            key={src}
-            className={`collabs-video ${i === activeVideo ? "active" : ""}`}
-            src={src}
-            muted
-            playsInline
-            autoPlay
-            loop
-            preload="metadata"
-          />
+          <video key={src} className={`collabs-video ${i === activeVideo ? "active" : ""}`} src={src} muted playsInline autoPlay loop preload="metadata" />
         ))}
         <div className="collabs-video-overlay" />
       </div>
@@ -80,16 +62,15 @@ export const Collaborations: React.FC = () => {
               aria-label={`Open ${c.title} collaboration`}
             >
               <span className="collab-text">{c.title}</span>
-
-              {/* фон за текст для текущей hovered коллаборации */}
-              <div
-                className={`collab-hover-image ${hovered === c.id ? "visible" : ""}`}
-                style={{ backgroundImage: `url(${c.hoverImage})` }}
-                aria-hidden
-              />
             </button>
           ))}
         </div>
+
+        <div
+          className={`collab-hover-image ${hovered ? "visible" : ""}`}
+          style={currentImage ? { backgroundImage: `url(${currentImage})` } : undefined}
+          aria-hidden
+        />
       </div>
     </section>
   );

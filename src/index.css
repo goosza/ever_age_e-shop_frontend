@@ -16,3 +16,28 @@ body {
   box-sizing: border-box;
   font-family: inherit;
 }
+
+/* global fixes to avoid horizontal overflow and normalize media */
+html, body, #root {
+  height: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden; /* временно: убирает горизонтальный скролл, потом поправьте источник */
+  margin: 0;
+  padding: 0;
+  overflow-y: auto; 
+  scrollbar-width: none;  
+}
+
+*, *::before, *::after { box-sizing: inherit; }
+
+/* защищаем медиа и встраиваемые элементы */
+img, picture, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* flex children should be allowed to shrink */
+[class*="flex"], .collabs-center, .collabs-content, .collab-item {
+  min-width: 0;
+}

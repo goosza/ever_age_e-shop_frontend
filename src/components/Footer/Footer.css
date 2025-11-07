@@ -1,0 +1,46 @@
+.site-footer {
+  padding: 20px 16px;
+  background: transparent;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 -1px 0 rgba(255,255,255,0.02) inset;
+}
+
+.footer-inner {
+  margin: 0 auto;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.shop-name {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.footer-right {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.footer-link {
+  text-decoration: none;
+  font-size: 0.95rem;
+  opacity: 0.95;
+  transition: opacity .15s ease, transform .12s ease;
+}
+
+.footer-link:hover,
+.footer-link:focus {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+/* mobile */
+@media (max-width: 600px) {
+  .footer-inner { gap: 8px; padding-top: 6px; padding-bottom: 6px; }
+  .footer-right { width: 100%; justify-content: center; }
+}
