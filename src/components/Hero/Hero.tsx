@@ -13,11 +13,12 @@ export const Hero: React.FC = () => {
   }, []);
 
   const scrollToProducts = () => {
-    const headerOffset = 64;
     const target = document.getElementById("products");
-    if (!target) return;
-    const y = target.getBoundingClientRect().top + window.scrollY - headerOffset;
-    window.scrollTo({ top: y, behavior: "smooth" });
+    if (!target) {
+      console.error("Element with id 'products' not found.");
+      return;
+    }
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
@@ -28,7 +29,7 @@ export const Hero: React.FC = () => {
             Welcome to Ever Age Accessories, a visionary brand specializing in 3D printed accessories.
             Explore our unique collection of 3D printed lighter cases and jewelry.
           </p>
-          <button className="hero-cta" onClick={scrollToProducts}>Buy smth</button>
+          <button className="hero-cta" onClick={scrollToProducts}>BUY SMTH</button>
         </div>
       </div>
 

@@ -1,6 +1,5 @@
 .products-section {
   width: 100%;
-  background: #fff;
   box-sizing: border-box;
   padding: 48px 20px;
 }
@@ -41,7 +40,7 @@
 /* карточка товара */
 .product-card {
   background: #fff;
-  border: 1px solid #eee;
+  border: none;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
@@ -49,7 +48,7 @@
   transition: box-shadow .18s ease, transform .12s ease;
 }
 .product-card:hover {
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  box-shadow: 0 0 30px #ff4040;
   transform: translateY(-4px);
 }
 

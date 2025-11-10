@@ -59,6 +59,11 @@
 }
 .app-header.scrolled .info-button { border-color: #ddd; color: #111;}
 
+.info-button:hover, .info-button:focus {
+  color: #FF4040;
+  text-decoration: underline;
+}
+
 /* минималистичная иконка корзины (тонкие линии) */
 .cart-button {
   position: relative;
@@ -101,6 +106,7 @@
   overflow: auto;
   background: #fff;
   border: 1px solid #ddd;
+  border-radius: 8px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.08);
   padding: 8px;
 }
@@ -114,3 +120,7 @@
 .cart-remove { margin-left:auto; background:#ef5350; color:#fff; border:none; padding:6px 8px; border-radius:6px; cursor:pointer; }
 .cart-empty { padding:16px; text-align:center; color:#666; }
 /* ...existing code... */
+
+.header-logo.white {
+  filter: brightness(0) invert(1); /* Делает логотип белым */
+}

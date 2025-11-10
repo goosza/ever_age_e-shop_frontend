@@ -42,7 +42,7 @@ export const Header: React.FC = () => {
   return (
     <header className={`app-header ${scrolled ? "scrolled" : "transparent"}`}>
       <div className="header-left">
-        <Link to="/info" className="info-button" aria-label="Info">INFO</Link>
+        <Link to="https://www.instagram.com/do_omer_/?next=%2Ffo" className="info-button" aria-label="Info">INFO</Link>
       </div>
 
       <div className="header-center">
@@ -62,7 +62,7 @@ export const Header: React.FC = () => {
         {open && (
           <div className="cart-popup">
             {items.length === 0 ? (
-              <div className="cart-empty">Корзина пуста</div>
+              <div className="cart-empty">The Cart is empty</div>
             ) : (
               items.map((it) => (
                 <div key={it.id} className="cart-row">
