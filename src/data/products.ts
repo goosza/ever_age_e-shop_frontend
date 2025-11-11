@@ -11,9 +11,11 @@ export type Product = {
 export const products: Product[] = [
   {
     id: "p1",
-    title: "Product One",
-    price: 29,
-    shortDescription: "Short description for product one.",
+    title: "ALIEN BAG",
+    price: 150000,
+    shortDescription: "Purse made in collaboration with czech brand Praga By Matous Fiala. \n" +
+        "\n" +
+        "Designed, 3D printed and postprocessed by hand by me.",
     image: "/products/product-one.jpg",
     available: true,
   },

@@ -47,7 +47,11 @@
   transition: height 220ms ease, opacity 220ms ease;
 }
 
-/* INFO кнопка */
+.app-header.transparent .header-logo {
+  filter: brightness(0) invert(1); /* Инвертирует цвета логотипа для белой версии */
+}
+
+  /* INFO кнопка */
 .info-button {
   background: transparent;
   padding: 6px 10px;

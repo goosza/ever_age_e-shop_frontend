@@ -7,12 +7,27 @@
     flex: 1;
     overflow-y: auto;
     background-color: #f9f9f9;
+    scrollbar-width: none; /* Для Firefox */
+    -ms-overflow-style: none; /* Для IE и Edge */
+}
+
+.product-left::-webkit-scrollbar {
+    display: none; /* Для Chrome, Safari и Opera */
+}
+
+.product-images {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
 }
 
 .product-image {
     width: 100%;
     height: auto;
     display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .product-right {
@@ -51,15 +66,16 @@
 .add-to-cart-btn {
     background-color: transparent;
     color: #ff4040;
-    border: none;
+    border: 2px solid #ff4040;
     padding: 10px 20px;
     font-family: inherit;
     font-size: 1rem;
-    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
 .add-to-cart-btn:hover {
-    border-color: #e63636;
+    border: 2px solid transparent;
+    text-decoration: underline;
+
 }
