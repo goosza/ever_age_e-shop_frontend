@@ -128,3 +128,22 @@
 .header-logo.white {
   filter: brightness(0) invert(1); /* Делает логотип белым */
 }
+
+.checkout-btn {
+  background-color: #ff4040;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.2s ease;
+  width: 100%;
+  text-align: center;
+}
+
+.checkout-btn:hover {
+  background-color: transparent;
+  color: #ff4040;
+}

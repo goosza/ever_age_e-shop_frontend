@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import "./Header.css";
 
@@ -9,6 +9,7 @@ export const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const popupRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -24,7 +25,6 @@ export const Header: React.FC = () => {
     const hero = document.querySelector("#hero");
 
     if (!hero || location.pathname.startsWith("/product")) {
-      // Если секция hero отсутствует или пользователь на странице продукта
       setScrolled(true);
       return;
     }
@@ -36,6 +36,11 @@ export const Header: React.FC = () => {
     io.observe(hero);
     return () => io.disconnect();
   }, [location.pathname]);
+
+  const handleCheckout = () => {
+    navigate("/checkout");
+    setOpen(false);
+  };
 
   return (
       <header className={`app-header ${scrolled ? "scrolled" : "transparent"}`}>
@@ -64,18 +69,23 @@ export const Header: React.FC = () => {
                 {items.length === 0 ? (
                     <div className="cart-empty">The Cart is empty</div>
                 ) : (
-                    items.map((it) => (
-                        <div key={it.id} className="cart-row">
-                          <img src={it.image ?? "/placeholder.png"} alt={it.title} className="cart-thumb" />
-                          <div className="cart-info">
-                            <div className="cart-title">{it.title}</div>
-                            <div className="cart-meta">
-                              <span>{it.qty} × {it.price.toFixed(2)} ₽</span>
+                    <>
+                      {items.map((it) => (
+                          <div key={it.id} className="cart-row">
+                            <img src={it.image ?? "/placeholder.png"} alt={it.title} className="cart-thumb" />
+                            <div className="cart-info">
+                              <div className="cart-title">{it.title}</div>
+                              <div className="cart-meta">
+                                <span>{it.qty} × {it.price.toFixed(2)} ₽</span>
+                              </div>
                             </div>
+                            <button className="cart-remove" onClick={() => removeItem(it.id)}>Убрать</button>
                           </div>
-                          <button className="cart-remove" onClick={() => removeItem(it.id)}>Убрать</button>
-                        </div>
-                    ))
+                      ))}
+                      <button className="checkout-btn" onClick={handleCheckout}>
+                        Checkout
+                      </button>
+                    </>
                 )}
               </div>
           )}
