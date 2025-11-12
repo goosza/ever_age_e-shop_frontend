@@ -1,0 +1,64 @@
+/* базовый layout: слева картинки, справа текст */
+.info-page {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+/* левая часть — галерея/изображения */
+.info-left {
+  flex: 1 1 60%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.info-left .gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 640px;
+}
+.info-left img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+/* правая часть — текст */
+.info-right {
+  flex: 0 0 360px;
+  max-width: 360px;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  position: sticky;
+  top: calc(var(--header-height, 0px) + 16px); /* закрепить под хедером */
+  align-self: flex-start;
+}
+
+.info-right h1 {
+  margin: 0 0 12px 0;
+  font-size: 1.25rem;
+}
+
+.info-right .lead {
+  margin: 0 0 12px 0;
+  color: rgba(0,0,0,0.75);
+}
+
+/* адаптив */
+@media (max-width: 900px) {
+  .info-page {
+    flex-direction: column;
+  }
+  .info-right {
+    position: static;
+    max-width: none;
+    width: 100%;
+    margin-top: 12px;
+  }
+}

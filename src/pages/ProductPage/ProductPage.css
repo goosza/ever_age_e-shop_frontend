@@ -42,6 +42,7 @@
     flex-direction: column;
     justify-content: flex-start; /* Изменено с flex-end на flex-start */
     overflow-y: auto; /* Добавлено для предотвращения переполнения */
+    overflow: none;
 }
 
 .product-info {

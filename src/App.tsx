@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "./context/CartContext";
 import { Header } from "./components/Header/Header";
-import { InfoPage } from "./pages/InfoPage";
+import  InfoPage  from "./pages/InfoPage/InfoPage";
 import { HomePage } from "./pages/HomePage/HomePage";
 import ProductPage from "./pages/ProductPage/ProductPage";
 import CheckoutPage from "./pages/CheckoutPage/CheckoutPage.tsx";
@@ -31,6 +31,7 @@ const App: React.FC = () => {
               <Route path="*" element={<HomePage />} />
               <Route path="/product/:id" element={<ProductPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/info" element={<InfoPage />} />
             </Routes>
           </main>
         </CartProvider>

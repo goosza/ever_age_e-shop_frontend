@@ -45,7 +45,7 @@ export const Header: React.FC = () => {
   return (
       <header className={`app-header ${scrolled ? "scrolled" : "transparent"}`}>
         <div className="header-left">
-          <Link to="https://www.instagram.com/do_omer_/?next=%2Ffo" className="info-button" aria-label="Info">INFO</Link>
+          <Link to="/info" className="info-button" aria-label="Info">INFO</Link>
         </div>
 
         <div className="header-center">

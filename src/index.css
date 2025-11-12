@@ -24,7 +24,6 @@ html, body, #root {
   overflow-x: hidden; /* временно: убирает горизонтальный скролл, потом поправьте источник */
   margin: 0;
   padding: 0;
-  overflow-y: auto; 
   scrollbar-width: none;  
 }
 
@@ -40,4 +39,32 @@ img, picture, video, canvas, svg {
 /* flex children should be allowed to shrink */
 [class*="flex"], .collabs-center, .collabs-content, .collab-item {
   min-width: 0;
+}
+
+:root {
+  --header-height: 0px;
+}
+
+/* главный способ: закрепить элемент прямо под шапкой */
+.stick-under-header {
+  position: sticky;
+  top: calc(var(--header-height, 0px) + 12px); /* + отступ под хедером — скорректируйте при необходимости */
+  align-self: flex-start;
+  z-index: 30;
+  overflow: visible;
+}
+
+/* fallback, если предки имеют overflow и sticky не работает — используйте с осторожностью */
+.fixed-under-header {
+  position: fixed;
+  top: calc(var(--header-height, 0px) + 12px);
+  right: 16px;      /* подберите под макет */
+  width: 320px;     /* подберите под макет */
+  z-index: 40;
+}
+
+/* пример минимального визуального правила чтобы не было пустого ruleset */
+.checkout-right.stick-under-header,
+.product-aside.stick-under-header {
+  will-change: transform;
 }

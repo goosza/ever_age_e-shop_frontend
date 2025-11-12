@@ -42,7 +42,7 @@ const ProductPage: React.FC = () => {
                     ))}
                 </div>
             </div>
-            <div className="product-right">
+            <div className="product-right stick-under-header">
                 <div className="product-info">
                     <h1 className="product-title">{product.title}</h1>
                     <p className="product-description">{product.shortDescription}</p>

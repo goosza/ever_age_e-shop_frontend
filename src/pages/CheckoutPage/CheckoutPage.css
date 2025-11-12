@@ -8,11 +8,42 @@
     flex: 1;
 }
 
+/* { changed code } */
+/* Ensure right column does not show internal scrollbars and stays visible while page scrolls */
 .checkout-right {
-    flex: 1;
-    background-color: #f9f9f9;
-    padding: 20px;
-    border: 1px solid #ddd;
+  padding: 20px;
+  box-sizing: border-box;
+  max-width: 40vw;
+  width: 100%;
+  background: transparent;
+
+  /* make the right column "sticky" so it doesn't get its own scrollbar
+     and stays visible while the page scrolls */
+  position: sticky;
+  top: 20px;
+  align-self: flex-start;
+
+  /* avoid any internal scrolling / clipping */
+  overflow: visible;
+  height: auto;
+}
+
+/* Make sure the list doesn't create its own scroll area */
+.cart-items {
+  max-height: none;
+  overflow: visible;
+}
+
+/* Address textarea must keep fixed size and not be resizable */
+.checkout-form textarea {
+  resize: vertical;        /* разрешить менять только по вертикали (удобно на мобильных/ПК) */
+  height: 40px;            /* стандартная высота как у input */
+  min-height: 40px;
+  max-height: 160px;       /* если пользователь захочет увеличить */
+  padding: 8px;
+  box-sizing: border-box;
+  font: inherit;
+  line-height: 1.2;
 }
 
 .checkout-form label {
@@ -59,3 +90,242 @@
 .cart-item-info h3 {
     margin: 0;
 }
+
+/* ...existing code... */
+
+/* { changed code } */
+/* Right column: cart items, qty controls and total */
+.checkout-right {
+  padding: 20px;
+  box-sizing: border-box;
+  max-width: 40vw;
+  width: 100%;
+  background: transparent;
+}
+
+.cart-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cart-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.cart-item-image {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex: 0 0 64px;
+}
+
+.cart-item-info {
+  flex: 1 1 auto;
+  min-width: 0; /* allow truncation */
+}
+
+.cart-item-info h3 {
+  margin: 0 0 6px 0;
+  font-size: 0.95rem;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+.cart-item-info p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.75);
+}
+
+/* Controls: - / input / + / remove */
+.cart-item-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.cart-item-controls button {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: inherit;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.cart-item-controls button:focus {
+  outline: 2px solid rgba(0,0,0,0.2);
+  outline-offset: 2px;
+}
+
+.qty-input {
+  width: 60px;
+  padding: 6px 8px;
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  color: inherit;
+
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* remove button style */
+.remove-btn {
+  margin-left: 8px;
+  background: transparent;
+  border: none;
+  color: #ff6b6b;
+  padding: 6px 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* Total / summary */
+.checkout-total {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.total-amount {
+  font-size: 1.05rem;
+}
+
+.total-amount strong {
+  font-size: 1.05rem;
+}
+
+/* Responsive: right column on small screens */
+@media (max-width: 40vw) {
+  .checkout-right {
+    max-width: none;
+    padding: 16px;
+  }
+  .cart-item-image {
+    width: 56px;
+    height: 56px;
+    flex: 0 0 56px;
+  }
+  .qty-input {
+    width: 48px;
+  }
+}
+
+/* { changed code } */
+/* ...existing code... */
+
+/* ...existing code... */
+
+/* { changed code } - form layout helpers */
+.form-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.form-row .field {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.form-row .field label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+.triple-row {
+  gap: 10px;
+}
+
+.triple-row .field {
+  flex: 1 1 0;
+}
+
+/* payment section */
+.payment-section {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+.payment-options {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.payment-options .radio {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* card fields */
+.card-fields label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.card-fields input,
+.card-fields select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #fff;
+  box-sizing: border-box;
+}
+
+/* ensure qty/input compatibility */
+.qty-input,
+.card-fields input[type="text"] {
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* responsive adjustments */
+@media (max-width: 720px) {
+  .form-row { flex-direction: column; }
+  .triple-row { flex-direction: column; }
+}
+
+/* { changed code } */
+/* ...existing code... */
