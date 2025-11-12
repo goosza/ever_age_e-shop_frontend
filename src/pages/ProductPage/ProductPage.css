@@ -1,6 +1,6 @@
 .product-page {
     display: flex;
-    height: 100vh;
+    height: 100%;
 }
 
 .product-left {
@@ -37,10 +37,11 @@
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
-    height: 100vh;
+    height: 100vh; /* Убедитесь, что высота занимает весь экран */
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: flex-start; /* Изменено с flex-end на flex-start */
+    overflow-y: auto; /* Добавлено для предотвращения переполнения */
 }
 
 .product-info {
