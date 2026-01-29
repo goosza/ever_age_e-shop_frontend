@@ -1,5 +1,7 @@
-// ...existing code...
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { products } from "../../data/products";
+import Collections from "../Collection/Collections";
 import "./Hero.css";
 
 const SLIDES = ["/hero1.jpg", "/hero2.jpg", "/hero3.png"];
@@ -38,7 +40,12 @@ export const Hero: React.FC = () => {
           <button key={i} className={`dot ${i === idx ? "active" : ""}`} onClick={() => setIdx(i)} aria-label={`Слайд ${i+1}`} />
         ))}
       </div>
+
+      <div className="hero-collections-in-hero">
+        <Collections />
+      </div>
     </section>
   );
 };
-// ...existing code...
+
+export default Hero;
