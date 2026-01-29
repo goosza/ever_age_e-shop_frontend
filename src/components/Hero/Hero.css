@@ -79,3 +79,172 @@
   pointer-events: none !important;
 }
 /* ...existing code... */
+
+/* ...existing hero styles... */
+
+/* position buttons bottom-left */
+.hero-collections {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 30;
+}
+
+/* keep same visual classes as Collaborations for consistency */
+.collab-btn {
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: transform 260ms cubic-bezier(.2,.9,.2,1), background 200ms;
+}
+.collab-btn:hover,
+.collab-btn:focus {
+  transform: translateY(-4px);
+  background: rgba(0,0,0,0.75);
+}
+
+/* central preview card */
+.hero-preview {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.98);
+  width: min(56vw, 900px);
+  max-height: 72vh;
+  border-radius: 12px;
+  box-shadow: 0 18px 48px rgba(0,0,0,0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 360ms cubic-bezier(.2,.9,.2,1), transform 360ms cubic-bezier(.2,.9,.2,1);
+  z-index: 25;
+  overflow: hidden;
+  background: rgba(10,10,10,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* visible state */
+.hero-preview.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* inner preview content */
+.hero-preview-inner {
+  width: 100%;
+  padding: 18px;
+  box-sizing: border-box;
+  color: #fff;
+}
+
+/* collection title in preview */
+.hero-preview-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+/* grid of product thumbnails */
+.hero-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+}
+
+/* individual preview item */
+.hero-preview-item {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-preview-thumb {
+  width: 100%;
+  padding-top: 75%;
+  background-position: center;
+  background-size: cover;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* product title under thumb */
+.hero-preview-name {
+  font-size: 0.85rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* move original central text to bottom-right (keeps existing content) */
+.hero-center-text--bottom-right {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  max-width: 40%;
+  z-index: 40;
+  text-align: right;
+}
+
+/* position existing Collections component inside hero (bottom-left) */
+.hero-collections-in-hero {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  z-index: 40;
+  width: auto; /* allow Collections internal grid to size itself */
+  max-width: 46%; /* optional limit so it doesn't overflow hero */
+  pointer-events: auto;
+}
+
+/* ensure Collections' full-width cards don't break hero layout */
+.hero-collections-in-hero .collections-section,
+.hero-collections-in-hero .collections-list,
+.hero-collections-in-hero .collection-card {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* on small screens place Collections under hero content (stacked) */
+@media (max-width: 900px) {
+  .hero-collections-in-hero {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    margin-top: 16px;
+    max-width: 100%;
+  }
+}
+
+/* responsive behavior: smaller screens shrink preview and reposition controls */
+@media (max-width: 900px) {
+  .hero-preview {
+    width: calc(100% - 40px);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .hero-collections {
+    left: 12px;
+    bottom: 12px;
+    gap: 8px;
+  }
+  .hero-center-text--bottom-right {
+    right: 12px;
+    bottom: 12px;
+    max-width: 60%;
+  }
+}
