@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-import { collabs } from "../../data/collab";
+import { collabs } from "@/data/collab.ts";
 import "./CollabPage.css";
 
 const CollabPage: React.FC = () => {

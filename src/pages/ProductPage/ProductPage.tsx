@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { products } from "../../data/products";
-import { useCart } from "../../context/CartContext";
+import { products } from "@/data/products.ts";
+import { useCart } from "@/hooks/useCart";
 import "./ProductPage.css";
 
 const ProductPage: React.FC = () => {

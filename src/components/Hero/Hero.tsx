@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { products } from "../../data/products";
 import Collections from "../Collection/Collections";
 import "./Hero.css";
 

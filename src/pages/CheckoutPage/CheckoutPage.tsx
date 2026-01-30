@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "@/hooks/useCart";
 import "./CheckoutPage.css";
 
 type FormData = {
@@ -22,7 +22,7 @@ const CheckoutPage: React.FC = () => {
   const { items, updateItemQuantity, removeItem } = useCart();
 
   // local total calculation (right column)
-  const total = items.reduce((s, it) => s + it.price * it.qty, 0);
+  const total = items.reduce((s: number, it: { price: number; qty: number; }) => s + it.price * it.qty, 0);
 
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
@@ -55,7 +55,7 @@ const CheckoutPage: React.FC = () => {
       return;
     }
 
-    setFormData((prev) => ({ ...prev, [name]: value as any }));
+    setFormData((prev) => ({ ...prev, [name]: value as never }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {

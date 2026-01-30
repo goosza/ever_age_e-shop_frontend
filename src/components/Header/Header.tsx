@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "@/hooks/useCart";
 import "./Header.css";
 
 export const Header: React.FC = () => {
