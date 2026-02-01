@@ -46,7 +46,7 @@ export const products: Product[] = [
     title: "Product Four",
     price: 29,
     shortDescription: "Short description for product four.",
-    image: "/products/product-four.PNG",
+    image: "/products/product-four.jpg",
     available: true,
     kolekce : "Alien",
 },
