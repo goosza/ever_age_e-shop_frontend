@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Media files (хранятся на VPS)
+public/videos/*.mp4
+public/videos/*.jpg
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
