@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "./context/CartContext";
 import { ProductProvider } from "./context/ProductContext";
 import { useProducts } from "./context/productContext";
-import { useHeaderHeight } from "./hooks/useHeaderHeight";
 import { Header } from "./components/Header/Header";
 import InfoPage from "./pages/InfoPage/InfoPage";
 import ProductPage from "./pages/ProductPage/ProductPage";
@@ -12,7 +11,6 @@ import CollabPage from "./pages/CollabPage/CollabPage";
 
 const AppRoutes: React.FC = () => {
   const { products, loading } = useProducts();
-  const headerHeight = useHeaderHeight();
 
   if (loading) return <div>Loading...</div>;
   if (!products.length || !products[0]?.uuid) return <div>No products available</div>;
@@ -20,7 +18,7 @@ const AppRoutes: React.FC = () => {
   return (
     <>
       <Header />
-      <main style={{ paddingTop: headerHeight }}>
+      <main style={{ paddingTop: "var(--header-height)" }}>
         <Routes>
           <Route path="/" element={<Navigate to={`/product/${products[0].uuid}`} replace />} />
           <Route path="/info" element={<InfoPage />} />

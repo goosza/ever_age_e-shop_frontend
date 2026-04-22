@@ -1,5 +1,5 @@
 /* InfoPage-specific styles — layout comes from detail-page.css */
-.info-right .lead {
+.detail-right .lead {
   margin: 0 0 24px 0;
   color: rgba(0, 0, 0, 0.75);
 }
