@@ -1,26 +1,4 @@
-.collab-page {
-  display: flex;
-  gap: 24px;
-  padding: 24px;
-  align-items: flex-start;
-  box-sizing: border-box;
-}
-
-.collab-left {
-  flex: 1 1 60%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.collab-main-image img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 8px;
-  display: block;
-}
-
+/* CollabPage-specific styles — layout comes from detail-page.css */
 .collab-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -34,37 +12,17 @@
   border-radius: 6px;
 }
 
-/* right text column */
-.collab-right {
-  flex: 0 0 340px;
-  max-width: 340px;
-  padding: 8px 12px;
-  box-sizing: border-box;
-  align-self: flex-start;
-}
-
-.collab-right h1 {
-  margin: 0 0 12px 0;
-  font-size: 1.25rem;
-}
-
 .collab-desc {
-  color: rgba(0,0,0,0.8);
+  color: rgba(0, 0, 0, 0.8);
   line-height: 1.4;
   margin-bottom: 16px;
 }
 
-.collab-actions .btn {
+.btn {
   display: inline-block;
   padding: 8px 12px;
   background: #222;
   color: #fff;
   border-radius: 6px;
   text-decoration: none;
-}
-
-/* responsive */
-@media (max-width: 900px) {
-  .collab-page { flex-direction: column; }
-  .collab-right { position: static; max-width: none; width: 100%; }
 }

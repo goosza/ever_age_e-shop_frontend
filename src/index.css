@@ -1,44 +1,47 @@
-/* Подключение Google Font Kosugi */
 @import url('https://fonts.googleapis.com/css2?family=Kosugi:wght@400;500;700&display=swap');
 
 :root {
   --header-height: 64px;
+  --color-primary: #ff4040;
+  --color-text: #111;
+  --color-bg: #ffffff;
+  --breakpoint-md: 900px;
+  --breakpoint-sm: 600px;
+
   color-scheme: light;
-  color: #111;
-  background-color: #ffffff;
+  color: var(--color-text);
+  background-color: var(--color-bg);
   font-family: 'Kosugi', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-body {
+html, body, #root {
+  height: 100%;
   margin: 0;
-  padding-top: var(--header-height);
-  background: #fff;
-  color: #111;
+  padding: 0;
   box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+body {
+  padding-top: var(--header-height);
+  background: var(--color-bg);
+  color: var(--color-text);
   font-family: inherit;
 }
 
-/* global fixes to avoid horizontal overflow and normalize media */
-html, body, #root {
-  height: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden; /* временно: убирает горизонтальный скролл, потом поправьте источник */
-  margin: 0;
-  padding: 0;
-  overflow-y: auto; 
-  scrollbar-width: none;  
+*, *::before, *::after {
+  box-sizing: inherit;
 }
 
-*, *::before, *::after { box-sizing: inherit; }
-
-/* защищаем медиа и встраиваемые элементы */
 img, picture, video, canvas, svg {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
-/* flex children should be allowed to shrink */
-[class*="flex"], .collabs-center, .collabs-content, .collab-item {
+/* allow flex children to shrink */
+.collabs-center, .collabs-content, .collab-item {
   min-width: 0;
 }

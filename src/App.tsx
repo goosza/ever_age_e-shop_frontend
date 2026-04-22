@@ -1,31 +1,18 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "./context/CartContext";
 import { ProductProvider } from "./context/ProductContext";
-import { useProducts } from "./hooks/useProducts";
+import { useProducts } from "./context/productContext";
+import { useHeaderHeight } from "./hooks/useHeaderHeight";
 import { Header } from "./components/Header/Header";
-import  InfoPage  from "./pages/InfoPage/InfoPage";
-// import { HomePage } from "./pages/HomePage/HomePage";
+import InfoPage from "./pages/InfoPage/InfoPage";
 import ProductPage from "./pages/ProductPage/ProductPage";
-import CheckoutPage from "./pages/CheckoutPage/CheckoutPage.tsx";
-import CollabPage from "./pages/CollabPage/CollabPage.tsx";
-import { productApi } from "./services/api";
+import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
+import CollabPage from "./pages/CollabPage/CollabPage";
 
 const AppRoutes: React.FC = () => {
   const { products, loading } = useProducts();
-  const [headerHeight, setHeaderHeight] = useState(0);
-
-  console.log("productApiGetAll:", productApi.getAll);
-
-  useEffect(() => {
-    const header = document.querySelector(".app-header") as HTMLElement;
-    if (header) {
-      const updateHeaderHeight = () => setHeaderHeight(header.offsetHeight);
-      updateHeaderHeight();
-      window.addEventListener("resize", updateHeaderHeight);
-      return () => window.removeEventListener("resize", updateHeaderHeight);
-    }
-  }, []);
+  const headerHeight = useHeaderHeight();
 
   if (loading) return <div>Loading...</div>;
   if (!products.length || !products[0]?.uuid) return <div>No products available</div>;

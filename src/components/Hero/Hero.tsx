@@ -5,10 +5,10 @@ import "./Hero.css";
 const SLIDES = ["/hero1.jpg", "/hero2.jpg", "/hero3.png"];
 
 export const Hero: React.FC = () => {
-  const [idx, setIdx] = useState(0);
+  const [slideIndex, setSlideIndex] = useState(0);
 
   useEffect(() => {
-    const t = setInterval(() => setIdx((i) => (i + 1) % SLIDES.length), 5000);
+    const t = setInterval(() => setSlideIndex((i) => (i + 1) % SLIDES.length), 5000);
     return () => clearInterval(t);
   }, []);
 
@@ -22,7 +22,7 @@ export const Hero: React.FC = () => {
   };
 
   return (
-    <section id="hero" className="hero" style={{ backgroundImage: `url(${SLIDES[idx]})` }}>
+    <section id="hero" className="hero" style={{ backgroundImage: `url(${SLIDES[slideIndex]})` }}>
       <div className="hero-overlay">
         <div className="hero-content">
           <p className="hero-sub">
@@ -35,7 +35,7 @@ export const Hero: React.FC = () => {
 
       <div className="hero-dots">
         {SLIDES.map((_, i) => (
-          <button key={i} className={`dot ${i === idx ? "active" : ""}`} onClick={() => setIdx(i)} aria-label={`Слайд ${i+1}`} />
+          <button key={i} className={`dot ${i === slideIndex ? "active" : ""}`} onClick={() => setSlideIndex(i)} aria-label={`Slide ${i + 1}`} />
         ))}
       </div>
 

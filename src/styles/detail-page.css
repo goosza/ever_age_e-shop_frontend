@@ -1,0 +1,50 @@
+/* Shared layout for detail pages (InfoPage, CollabPage) */
+.detail-page {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.detail-left {
+  flex: 1 1 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-left img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.detail-right {
+  flex: 0 0 340px;
+  max-width: 340px;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  align-self: flex-start;
+  position: sticky;
+  top: calc(var(--header-height) + 16px);
+}
+
+.detail-right h1 {
+  margin: 0 0 12px 0;
+  font-size: 1.25rem;
+}
+
+@media (max-width: 900px) {
+  .detail-page {
+    flex-direction: column;
+  }
+  .detail-right {
+    position: static;
+    max-width: none;
+    width: 100%;
+    margin-top: 12px;
+  }
+}

@@ -1,26 +1,9 @@
-import { createContext, useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import { CartContext } from "./cartContext";
+import type { CartItem } from "./cartContext";
 
-export type CartItem = {
-  id: string;
-  title: string;
-  price: number;
-  qty: number;
-  image?: string;
-};
-
-type CartContextType = {
-  items: CartItem[];
-  addItem: (item: CartItem) => void;
-  removeItem: (id: string) => void;
-  updateItemQuantity: (id: string, qty: number) => void;
-  itemCount: number;
-  total: number;
-  clearCart: () => void;
-};
-
-const CartContext = createContext<CartContextType | undefined>(undefined);
-
-export const CartProvider = ({ children }: { children?: ReactNode }) => {
+export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>(() => {
     try {
       const raw = localStorage.getItem("cart");
@@ -36,40 +19,33 @@ export const CartProvider = ({ children }: { children?: ReactNode }) => {
 
   const addItem = (item: CartItem) => {
     setItems((prev) => {
-      const found = prev.find((p) => p.id === item.id);
-      if (found) {
+      const existing = prev.find((p) => p.id === item.id);
+      if (existing) {
         return prev.map((p) => (p.id === item.id ? { ...p, qty: p.qty + item.qty } : p));
       }
       return [...prev, item];
     });
   };
 
-  const removeItem = (id: string) => setItems((prev) => prev.filter((i) => i.id !== id));
+  const removeItem = (id: string) =>
+    setItems((prev) => prev.filter((item) => item.id !== id));
 
   const updateItemQuantity = (id: string, qty: number) => {
     if (qty <= 0) {
       removeItem(id);
       return;
     }
-    setItems((prev) => prev.map((i) => (i.id === id ? { ...i, qty } : i)));
+    setItems((prev) => prev.map((item) => (item.id === id ? { ...item, qty } : item)));
   };
 
   const clearCart = () => setItems([]);
 
-  const itemCount = items.reduce((s, i) => s + i.qty, 0);
-  const total = items.reduce((s, i) => s + (i.price ?? 0) * i.qty, 0);
+  const itemCount = items.reduce((sum, item) => sum + item.qty, 0);
+  const total = items.reduce((sum, item) => sum + item.price * item.qty, 0);
 
-  const value: CartContextType = {
-    items,
-    addItem,
-    removeItem,
-    updateItemQuantity,
-    itemCount,
-    total,
-    clearCart,
-  };
-
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  return (
+    <CartContext.Provider value={{ items, addItem, removeItem, updateItemQuantity, itemCount, total, clearCart }}>
+      {children}
+    </CartContext.Provider>
+  );
 };
-
-export { CartContext };

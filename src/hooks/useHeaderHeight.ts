@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
 
-const useHeaderHeight = () => {
+export const useHeaderHeight = () => {
   const [headerHeight, setHeaderHeight] = useState(0);
 
   useEffect(() => {
-    const header = document.querySelector(".app-header") as HTMLElement;
-    if (header) {
-      const updateHeaderHeight = () => setHeaderHeight(header.offsetHeight);
-      updateHeaderHeight();
-      window.addEventListener("resize", updateHeaderHeight);
-      return () => window.removeEventListener("resize", updateHeaderHeight);
-    }
+    const header = document.querySelector(".app-header") as HTMLElement | null;
+    if (!header) return;
+    const update = () => setHeaderHeight(header.offsetHeight);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, []);
 
   return headerHeight;
 };
-
-export default useHeaderHeight;

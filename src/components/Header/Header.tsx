@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useCart } from "@/hooks/useCart";
+import { useCart } from "@/context/cartContext";
 import "./Header.css";
 
 export const Header: React.FC = () => {
@@ -55,7 +55,7 @@ export const Header: React.FC = () => {
         </div>
 
         <div className="header-right" ref={popupRef}>
-          <button className="cart-button" onClick={() => setOpen((s) => !s)} aria-label="Корзина">
+          <button className="cart-button" onClick={() => setOpen((s) => !s)} aria-label="Cart">
             <svg className="cart-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
               <path d="M6 6h15l-1.5 9h-11L6 6z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               <circle cx="10" cy="20" r="1" fill="currentColor"/>
@@ -79,7 +79,7 @@ export const Header: React.FC = () => {
                                 <span>{it.qty} × {it.price.toFixed(2)} ₽</span>
                               </div>
                             </div>
-                            <button className="cart-remove" onClick={() => removeItem(it.id)}>Убрать</button>
+                            <button className="cart-remove" onClick={() => removeItem(it.id)}>Remove</button>
                           </div>
                       ))}
                       <button className="checkout-btn" onClick={handleCheckout}>

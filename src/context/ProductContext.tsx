@@ -1,31 +1,29 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
 import { productApi } from "../services/api";
+import type { Product } from "../data/products";
 import { ProductContext } from "./productContext";
-import type { ProductContextType } from "./productContext";
 
-export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [products, setProducts] = useState<ProductContextType["products"]>([]);
+export const ProductProvider = ({ children }: { children: ReactNode }) => {
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        const data = await productApi.getAll();
+    productApi
+      .getAll()
+      .then((data) => {
         setProducts(data);
         setError(null);
-      } catch (err) {
+      })
+      .catch((err) => {
         setError(err instanceof Error ? err.message : "Unknown error");
         setProducts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProducts();
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  const getProductById = (id: string) => products.find(p => p.uuid === id);
+  const getProductById = (id: string) => products.find((p) => p.uuid === id);
 
   return (
     <ProductContext.Provider value={{ products, loading, error, getProductById }}>

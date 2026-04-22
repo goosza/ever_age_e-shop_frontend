@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 import type { Product } from "../data/products";
 
 export type ProductContextType = {
@@ -9,3 +9,9 @@ export type ProductContextType = {
 };
 
 export const ProductContext = createContext<ProductContextType | undefined>(undefined);
+
+export const useProducts = () => {
+  const context = useContext(ProductContext);
+  if (!context) throw new Error("useProducts must be used within ProductProvider");
+  return context;
+};
