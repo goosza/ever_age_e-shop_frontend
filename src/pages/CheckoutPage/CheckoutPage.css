@@ -120,10 +120,26 @@
   cursor: pointer;
   font: inherit;
   margin-top: 12px;
+  width: 100%;
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
   opacity: 0.85;
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: #fee;
+  border: 1px solid #fcc;
+  color: #c33;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 12px 0;
+  font-size: 0.9rem;
 }
 
 /* Cart items */
