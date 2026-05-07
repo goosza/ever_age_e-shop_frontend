@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useProducts } from "@/context/productContext";
+import { useProducts } from "@/context/productContextDef";
 import type { Product } from "@/data/products";
 import "./Collections.css";
 

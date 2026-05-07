@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useCart } from "@/context/cartContext";
+import { useCart } from "@/context/cartContextDef";
 import "./CheckoutPage.css";
 
 type FormData = {
