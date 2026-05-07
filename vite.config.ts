@@ -13,7 +13,6 @@ export default defineConfig(({ mode }) => {
         '/api': {
           target: env.VITE_BACKEND_URL || 'http://localhost:8080',
           changeOrigin: true,
-          rewrite: (path: string) => path.replace(/^\/api/, '/api')
         }
       }
     },
