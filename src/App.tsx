@@ -7,6 +7,9 @@ import HomePage from "./pages/HomePage/HomePage";
 import InfoPage from "./pages/InfoPage/InfoPage";
 import ProductPage from "./pages/ProductPage/ProductPage";
 import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
+import CheckoutSuccess from "./pages/CheckoutPage/CheckoutSuccess";
+import CheckoutCancel from "./pages/CheckoutPage/CheckoutCancel";
+import OrderTrackingPage from "./pages/OrderTrackingPage/OrderTrackingPage";
 import CollabPage from "./pages/CollabPage/CollabPage";
 
 const AppRoutes: React.FC = () => {
@@ -19,6 +22,9 @@ const AppRoutes: React.FC = () => {
           <Route path="/info" element={<InfoPage />} />
           <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/checkout/success" element={<CheckoutSuccess />} />
+          <Route path="/checkout/cancel" element={<CheckoutCancel />} />
+          <Route path="/orders/track/:orderNumber" element={<OrderTrackingPage />} />
           <Route path="/collab/:id" element={<CollabPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

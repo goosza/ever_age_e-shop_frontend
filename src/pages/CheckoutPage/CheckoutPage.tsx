@@ -67,6 +67,17 @@ const CheckoutPage: React.FC = () => {
 
       const { sessionUrl } = await response.json();
       
+      // Store order info in localStorage as fallback
+      localStorage.setItem("lastOrder", JSON.stringify({
+        customerEmail: formData.email,
+        totalAmount: total,
+        items: items.map(item => ({
+          title: item.title,
+          quantity: item.qty,
+          price: item.price,
+        })),
+      }));
+      
       // Redirect to Stripe Checkout
       window.location.href = sessionUrl;
     } catch (err) {
