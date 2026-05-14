@@ -5,7 +5,11 @@ import type { Product } from "@/data/products";
 import "./ProductSection.css";
 
 export const ProductsSection: React.FC = () => {
-  const { products } = useProducts();
+  const { products, loadProducts } = useProducts();
+
+  React.useEffect(() => {
+    loadProducts();
+  }, [loadProducts]);
 
   return (
     <section id="products" className="products-section">

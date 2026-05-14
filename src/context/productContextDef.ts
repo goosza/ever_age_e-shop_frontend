@@ -6,6 +6,7 @@ export type ProductContextType = {
   loading: boolean;
   error: string | null;
   getProductById: (id: string) => Product | undefined;
+  loadProducts: () => void;
 };
 
 export const ProductContext = createContext<ProductContextType | undefined>(undefined);

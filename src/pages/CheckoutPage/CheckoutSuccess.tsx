@@ -25,40 +25,36 @@ const CheckoutSuccess: React.FC = () => {
 
   useEffect(() => {
     const loadOrderInfo = async () => {
-      // Always clear cart on success page
+      // Clear cart
       clearCart();
 
       if (!sessionId) {
-        // No session ID - just show basic success message
         setOrder({});
         setLoading(false);
         return;
       }
 
-      // First, try to get order info from localStorage (immediate)
+      // Try localStorage first
       const storedOrder = localStorage.getItem("lastOrder");
       if (storedOrder) {
         try {
-          const parsedOrder = JSON.parse(storedOrder);
-          setOrder(parsedOrder);
+          setOrder(JSON.parse(storedOrder));
           localStorage.removeItem("lastOrder");
         } catch (err) {
           console.error("Error parsing stored order:", err);
         }
       }
 
-      // Then try to fetch from backend (if endpoint exists)
+      // Then try backend
       try {
         const API_BASE_URL = import.meta.env.VITE_API_URL || "/api";
         const response = await fetch(`${API_BASE_URL}/orders/by-session/${sessionId}`);
         
         if (response.ok) {
           const orderData = await response.json();
-          setOrder(orderData); // Update with backend data if available
+          setOrder(orderData);
         }
-        // If backend returns error, we already have localStorage data or empty object
       } catch (err) {
-        // Network error or endpoint doesn't exist yet - that's OK
         console.log("Backend order endpoint not available yet:", err);
       } finally {
         setLoading(false);
@@ -66,7 +62,8 @@ const CheckoutSuccess: React.FC = () => {
     };
 
     loadOrderInfo();
-  }, [sessionId, clearCart]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run only once on mount
 
   if (loading) {
     return (
