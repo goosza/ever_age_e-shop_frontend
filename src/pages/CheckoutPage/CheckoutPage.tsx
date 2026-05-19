@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { useCart } from "@/context/cartContextDef";
+import { ZasilkovnaPickupSelector, type PickupPoint } from "@/components/ZasilkovnaPickupSelector/ZasilkovnaPickupSelector";
 import "./CheckoutPage.css";
 
 type FormData = {
   firstName: string;
   lastName: string;
   email: string;
+  phone: string;
   address: string;
   city: string;
   postalCode: string;
+  country: string;
 };
 
 const CheckoutPage: React.FC = () => {
@@ -17,14 +20,19 @@ const CheckoutPage: React.FC = () => {
     firstName: "",
     lastName: "",
     email: "",
+    phone: "",
     address: "",
     city: "",
     postalCode: "",
+    country: "CZ",
   });
+  const [pickupPoint, setPickupPoint] = useState<PickupPoint | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const total = items.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const itemsTotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const shippingCost = 12.00; // Zasilkovna shipping cost
+  const total = itemsTotal + shippingCost;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -36,6 +44,11 @@ const CheckoutPage: React.FC = () => {
     
     if (!formData.firstName || !formData.lastName || !formData.email) {
       setError("Please fill all required fields");
+      return;
+    }
+
+    if (!pickupPoint) {
+      setError("Please select a Zasilkovna pickup point");
       return;
     }
 
@@ -58,6 +71,13 @@ const CheckoutPage: React.FC = () => {
             quantity: item.qty,
             price: item.price,
           })),
+          shippingInfo: {
+            provider: "ZASILKOVNA",
+            cost: shippingCost,
+            pickupPointId: pickupPoint.id,
+            pickupPointName: pickupPoint.name,
+            pickupPointAddress: pickupPoint.address,
+          },
         }),
       });
 
@@ -138,6 +158,18 @@ const CheckoutPage: React.FC = () => {
           </label>
 
           <label>
+            Phone *
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+              disabled={loading}
+            />
+          </label>
+
+          <label>
             Address
             <textarea
               name="address"
@@ -174,11 +206,25 @@ const CheckoutPage: React.FC = () => {
             </div>
           </div>
 
+          {/* Zasilkovna Pickup Selector */}
+          <div className="zasilkovna-section">
+            <ZasilkovnaPickupSelector
+              apiKey={import.meta.env.VITE_ZASILKOVNA_API_KEY || ""}
+              country={formData.country}
+              language="en"
+              onSelect={setPickupPoint}
+            />
+          </div>
+
           {error && <div className="error-message">{error}</div>}
 
-          <button type="submit" className="submit-btn" disabled={loading}>
+          <button type="submit" className="submit-btn" disabled={loading || !pickupPoint}>
             {loading ? "Processing..." : "Proceed to Payment"}
           </button>
+
+          {!pickupPoint && (
+            <p className="pickup-warning">Please select a pickup point to continue</p>
+          )}
         </form>
       </div>
 
@@ -244,6 +290,14 @@ const CheckoutPage: React.FC = () => {
           <div className="total-row">
             <span>Items:</span>
             <span>{items.reduce((s, it) => s + it.qty, 0)}</span>
+          </div>
+          <div className="total-row">
+            <span>Subtotal:</span>
+            <span>{itemsTotal.toFixed(2)} ₽</span>
+          </div>
+          <div className="total-row">
+            <span>Shipping (Zasilkovna):</span>
+            <span>{shippingCost.toFixed(2)} ₽</span>
           </div>
           <div className="total-row total-amount">
             <strong>Total to pay:</strong>

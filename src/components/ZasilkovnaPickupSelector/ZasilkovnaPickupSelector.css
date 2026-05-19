@@ -1,0 +1,79 @@
+.zasilkovna-selector {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  background: white;
+}
+
+.selector-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: #333;
+}
+
+.selected-point {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.point-info {
+  margin-bottom: 12px;
+}
+
+.point-name {
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 0 0 6px 0;
+  color: #0c4a6e;
+}
+
+.point-address {
+  font-size: 0.9rem;
+  margin: 0 0 4px 0;
+  color: #475569;
+}
+
+.point-city {
+  font-size: 0.9rem;
+  margin: 0;
+  color: #475569;
+}
+
+.change-btn {
+  background: transparent;
+  border: none;
+  color: #2563eb;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.change-btn:hover {
+  color: #1d4ed8;
+}
+
+.select-btn {
+  width: 100%;
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.select-btn:hover {
+  background: #1d4ed8;
+}
+
+.select-btn:active {
+  transform: scale(0.98);
+}
