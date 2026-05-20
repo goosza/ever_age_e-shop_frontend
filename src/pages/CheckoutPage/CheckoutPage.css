@@ -107,6 +107,189 @@
   margin: 16px 0;
 }
 
+/* Shipping Method Selection */
+.shipping-method-section {
+  margin: 20px 0;
+  padding: 16px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.shipping-method-section h3 {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Provider Selection (horizontal) */
+.shipping-providers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.provider-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 12px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.provider-option:hover {
+  border-color: #ff4040;
+  background: #fff5f5;
+  transform: translateY(-2px);
+}
+
+.provider-option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.provider-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.provider-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.provider-desc {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.provider-option:has(input:checked) {
+  border-color: #ff4040;
+  background: #fff5f5;
+  box-shadow: 0 2px 8px rgba(255, 64, 64, 0.2);
+}
+
+.provider-option:has(input:checked) .provider-name {
+  color: #ff4040;
+}
+
+/* Delivery Method Options (vertical) */
+.shipping-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.shipping-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.shipping-option:hover {
+  border-color: #ff4040;
+  background: #fff5f5;
+}
+
+.shipping-option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.shipping-option input[type="radio"]:checked + .shipping-option-content {
+  color: #ff4040;
+  font-weight: 600;
+}
+
+.shipping-option-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  gap: 12px;
+}
+
+.shipping-details {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.shipping-name {
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.shipping-desc {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 400;
+}
+
+.shipping-price {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #666;
+  white-space: nowrap;
+}
+
+.shipping-option:has(input:checked) {
+  border-color: #ff4040;
+  background: #fff5f5;
+}
+
+.shipping-option:has(input:checked) .shipping-name {
+  color: #ff4040;
+  font-weight: 600;
+}
+
+.shipping-option:has(input:checked) .shipping-price {
+  color: #ff4040;
+}
+
+/* Coming Soon Message */
+.coming-soon-message {
+  text-align: center;
+  padding: 32px 16px;
+  background: white;
+  border-radius: 6px;
+  border: 2px dashed #e0e0e0;
+}
+
+.coming-soon-message p {
+  margin: 8px 0;
+  color: #666;
+}
+
+.coming-soon-message p:first-child {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
 .pickup-warning {
   color: #ef4444;
   font-size: 0.85rem;
