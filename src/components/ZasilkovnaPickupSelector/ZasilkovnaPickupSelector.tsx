@@ -35,13 +35,46 @@ export function ZasilkovnaPickupSelector({
   onSelect 
 }: Props) {
   const [selectedPoint, setSelectedPoint] = useState<PickupPoint | null>(null);
+  const [widgetReady, setWidgetReady] = useState(false);
   
   useEffect(() => {
-    // Initialize Zasilkovna Widget
-    if (typeof window !== 'undefined' && window.Packeta) {
+    // Check if widget is loaded
+    const checkWidget = () => {
+      if (typeof window !== 'undefined' && window.Packeta) {
+        console.log('Zasilkovna widget loaded successfully');
+        setWidgetReady(true);
+      } else {
+        console.warn('Zasilkovna widget not loaded yet');
+      }
+    };
+    
+    // Check immediately
+    checkWidget();
+    
+    // Also check after a delay in case script is still loading
+    const timer = setTimeout(checkWidget, 1000);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
+  const openWidget = () => {
+    console.log('Opening Zasilkovna widget...', { apiKey, country, widgetReady });
+    
+    if (!apiKey || apiKey === 'your_zasilkovna_api_key_here') {
+      alert('Zasilkovna API key is not configured. Please add VITE_ZASILKOVNA_API_KEY to .env.local');
+      return;
+    }
+    
+    if (!window.Packeta) {
+      alert('Zasilkovna widget is not loaded. Please refresh the page.');
+      return;
+    }
+    
+    try {
       window.Packeta.Widget.pick(
         apiKey,
         (point: any) => {
+          console.log('Pickup point selected:', point);
           // Callback when user selects a pickup point
           const pickupPoint: PickupPoint = {
             id: point.id,
@@ -60,18 +93,19 @@ export function ZasilkovnaPickupSelector({
           layout: 'hd'
         }
       );
-    }
-  }, [apiKey, country, language, onSelect]);
-  
-  const openWidget = () => {
-    if (window.Packeta) {
-      window.Packeta.Widget.open();
+    } catch (error) {
+      console.error('Error opening Zasilkovna widget:', error);
+      alert('Failed to open pickup point selector. Please try again.');
     }
   };
   
   return (
     <div className="zasilkovna-selector">
       <h3 className="selector-title">Zasilkovna Pick-up Point</h3>
+      
+      {!widgetReady && (
+        <p className="widget-loading">Loading pickup point selector...</p>
+      )}
       
       {selectedPoint ? (
         <div className="selected-point">
@@ -95,8 +129,9 @@ export function ZasilkovnaPickupSelector({
           type="button"
           onClick={openWidget} 
           className="select-btn"
+          disabled={!widgetReady}
         >
-          Select Pick-up Point
+          {widgetReady ? 'Select Pick-up Point' : 'Loading...'}
         </button>
       )}
     </div>
