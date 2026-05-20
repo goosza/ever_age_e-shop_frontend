@@ -273,23 +273,50 @@
   font-size: 0.9rem;
 }
 
-/* Total */
+/* Total - Clean minimal design */
 .checkout-total {
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  margin-top: 20px;
+  padding: 16px;
+  background: white !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 8px;
 }
 
 .total-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-  font-size: 0.95rem;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 10px !important;
+  font-size: 0.95rem !important;
+  padding: 10px 0 !important;
+  background: transparent !important;
+  border-bottom: 1px solid #f0f0f0 !important;
+  color: #333 !important;
+}
+
+.total-row:last-child {
+  margin-bottom: 0 !important;
+  border-bottom: none !important;
 }
 
 .total-amount {
-  font-size: 1.05rem;
+  font-size: 1.15rem !important;
+  background: transparent !important;
+  border: none !important;
+  border-top: 2px solid #333 !important;
+  padding: 12px 0 0 0 !important;
+  margin-top: 8px !important;
+  color: #111 !important;
+  font-weight: 600 !important;
+}
+
+.total-row strong {
+  color: inherit !important;
+  font-weight: 600 !important;
+}
+
+.total-row span {
+  color: inherit !important;
 }
 
 /* Responsive */
