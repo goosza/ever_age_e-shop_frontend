@@ -93,6 +93,20 @@ const CheckoutPage: React.FC = () => {
     setError(null);
 
     try {
+      // Prepare customer info - only include address fields if needed
+      const customerInfo = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        country: formData.country,
+        ...(needsAddress && {
+          address: formData.address,
+          city: formData.city,
+          postalCode: formData.postalCode,
+        }),
+      };
+
       const shippingInfo = needsPickupPoint && pickupPoint
         ? {
             provider: shippingProvider,
@@ -106,16 +120,13 @@ const CheckoutPage: React.FC = () => {
             provider: shippingProvider,
             method: shippingProvider === "ZASILKOVNA" ? zasilkovnaMethod : "STANDARD",
             cost: shippingCost,
-            address: formData.address,
-            city: formData.city,
-            postalCode: formData.postalCode,
           };
 
       const response = await fetch("/api/orders/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          customerInfo: formData,
+          customerInfo,
           items: items.map((item) => ({
             productId: item.id,
             quantity: item.qty,
