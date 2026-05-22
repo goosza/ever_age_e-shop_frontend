@@ -145,8 +145,8 @@
 }
 
 .provider-option:hover {
-  border-color: #ff4040;
-  background: #fff5f5;
+  border-color: #333;
+  background: #f8f8f8;
   transform: translateY(-2px);
 }
 
@@ -176,13 +176,13 @@
 }
 
 .provider-option:has(input:checked) {
-  border-color: #ff4040;
-  background: #fff5f5;
-  box-shadow: 0 2px 8px rgba(255, 64, 64, 0.2);
+  border-color: #333;
+  background: #f8f8f8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .provider-option:has(input:checked) .provider-name {
-  color: #ff4040;
+  color: #1a1a1a;
 }
 
 /* Delivery Method Options (vertical) */
@@ -194,8 +194,6 @@
 
 .shipping-option {
   display: flex;
-  align-items: center;
-  gap: 12px;
   padding: 12px;
   background: white;
   border: 2px solid #e0e0e0;
@@ -205,21 +203,35 @@
 }
 
 .shipping-option:hover {
-  border-color: #ff4040;
-  background: #fff5f5;
+  border-color: #333;
+  background: #f8f8f8;
+}
+
+.shipping-option-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  gap: 12px;
+}
+
+.shipping-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
 }
 
 .shipping-option input[type="radio"] {
   width: 18px;
   height: 18px;
-  margin: 0;
+  margin: 0 !important;
   cursor: pointer;
   flex-shrink: 0;
 }
 
 .shipping-option input[type="radio"]:checked + .shipping-option-content {
-  color: #ff4040;
-  font-weight: 600;
+  color: inherit;
 }
 
 .shipping-option-content {
@@ -232,7 +244,7 @@
 
 .shipping-details {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 8px;
   flex-wrap: wrap;
 }
@@ -244,7 +256,7 @@
 }
 
 .shipping-desc {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: #666;
   font-weight: 400;
 }
@@ -257,17 +269,17 @@
 }
 
 .shipping-option:has(input:checked) {
-  border-color: #ff4040;
-  background: #fff5f5;
+  border-color: #333;
+  background: #f8f8f8;
 }
 
 .shipping-option:has(input:checked) .shipping-name {
-  color: #ff4040;
+  color: #1a1a1a;
   font-weight: 600;
 }
 
 .shipping-option:has(input:checked) .shipping-price {
-  color: #ff4040;
+  color: #1a1a1a;
 }
 
 /* Coming Soon Message */
@@ -326,7 +338,7 @@
 }
 
 .submit-btn {
-  background-color: #ff4040;
+  background-color: #1a1a1a;
   color: #fff;
   border: none;
   padding: 12px 20px;
@@ -337,10 +349,13 @@
   width: 100%;
   border-radius: 6px;
   font-weight: 600;
+  transition: all 0.2s;
 }
 
 .submit-btn:hover:not(:disabled) {
-  opacity: 0.85;
+  background-color: #333;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .submit-btn:disabled {

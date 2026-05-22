@@ -13,10 +13,11 @@
 }
 
 .selected-point {
-  background: #f0f9ff;
-  border: 1px solid #bae6fd;
+  background: #f8f8f8;
+  border: 2px solid #333;
   border-radius: 6px;
   padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .point-info {
@@ -27,7 +28,7 @@
   font-weight: 600;
   font-size: 1rem;
   margin: 0 0 6px 0;
-  color: #0c4a6e;
+  color: #1a1a1a;
 }
 
 .point-address {
@@ -45,7 +46,7 @@
 .change-btn {
   background: transparent;
   border: none;
-  color: #2563eb;
+  color: #333;
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
@@ -54,12 +55,12 @@
 }
 
 .change-btn:hover {
-  color: #1d4ed8;
+  color: #000;
 }
 
 .select-btn {
   width: 100%;
-  background: #2563eb;
+  background: #1a1a1a;
   color: white;
   border: none;
   padding: 12px 20px;
@@ -67,11 +68,13 @@
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
 
 .select-btn:hover:not(:disabled) {
-  background: #1d4ed8;
+  background: #333;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .select-btn:active:not(:disabled) {
@@ -88,4 +91,14 @@
   font-size: 0.9rem;
   margin: 8px 0;
   font-style: italic;
+}
+
+.widget-error {
+  color: #ef4444;
+  font-size: 0.9rem;
+  margin: 8px 0;
+  padding: 12px;
+  background: #fee;
+  border: 1px solid #fcc;
+  border-radius: 6px;
 }

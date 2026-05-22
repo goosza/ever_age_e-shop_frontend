@@ -231,7 +231,7 @@ const CheckoutPage: React.FC = () => {
                   disabled={loading}
                 />
                 <div className="provider-content">
-                  <span className="provider-name">📦 Zásilkovna</span>
+                  <span className="provider-name">Zásilkovna</span>
                   <span className="provider-desc">Multiple delivery options</span>
                 </div>
               </label>
@@ -249,7 +249,7 @@ const CheckoutPage: React.FC = () => {
                   disabled={loading}
                 />
                 <div className="provider-content">
-                  <span className="provider-name">🚚 Other</span>
+                  <span className="provider-name">Other</span>
                   <span className="provider-desc">Coming soon</span>
                 </div>
               </label>
@@ -264,84 +264,92 @@ const CheckoutPage: React.FC = () => {
               <div className="shipping-options">
                 
                 <label className="shipping-option">
-                  <input
-                    type="radio"
-                    name="zasilkovnaMethod"
-                    value="PICKUP"
-                    checked={zasilkovnaMethod === "PICKUP"}
-                    onChange={(e) => {
-                      setZasilkovnaMethod(e.target.value as ZasilkovnaMethod);
-                      setPickupPoint(null);
-                    }}
-                    disabled={loading}
-                  />
                   <div className="shipping-option-content">
-                    <div className="shipping-details">
-                      <span className="shipping-name">📦 Pick-up Point</span>
-                      <span className="shipping-desc">Physical location, COD available</span>
+                    <div className="shipping-left">
+                      <input
+                        type="radio"
+                        name="zasilkovnaMethod"
+                        value="PICKUP"
+                        checked={zasilkovnaMethod === "PICKUP"}
+                        onChange={(e) => {
+                          setZasilkovnaMethod(e.target.value as ZasilkovnaMethod);
+                          setPickupPoint(null);
+                        }}
+                        disabled={loading}
+                      />
+                      <div className="shipping-details">
+                        <span className="shipping-name">Pick-up Point</span>
+                        <span className="shipping-desc">Physical location, COD available</span>
+                      </div>
                     </div>
                     <span className="shipping-price">12.00 ₽</span>
                   </div>
                 </label>
 
                 <label className="shipping-option">
-                  <input
-                    type="radio"
-                    name="zasilkovnaMethod"
-                    value="ZBOX"
-                    checked={zasilkovnaMethod === "ZBOX"}
-                    onChange={(e) => {
-                      setZasilkovnaMethod(e.target.value as ZasilkovnaMethod);
-                      setPickupPoint(null);
-                    }}
-                    disabled={loading}
-                  />
                   <div className="shipping-option-content">
-                    <div className="shipping-details">
-                      <span className="shipping-name">📫 Z-BOX (24/7)</span>
-                      <span className="shipping-desc">Automated locker</span>
+                    <div className="shipping-left">
+                      <input
+                        type="radio"
+                        name="zasilkovnaMethod"
+                        value="ZBOX"
+                        checked={zasilkovnaMethod === "ZBOX"}
+                        onChange={(e) => {
+                          setZasilkovnaMethod(e.target.value as ZasilkovnaMethod);
+                          setPickupPoint(null);
+                        }}
+                        disabled={loading}
+                      />
+                      <div className="shipping-details">
+                        <span className="shipping-name">Z-BOX (24/7)</span>
+                        <span className="shipping-desc">Automated locker</span>
+                      </div>
                     </div>
                     <span className="shipping-price">10.00 ₽</span>
                   </div>
                 </label>
 
                 <label className="shipping-option">
-                  <input
-                    type="radio"
-                    name="zasilkovnaMethod"
-                    value="HOME"
-                    checked={zasilkovnaMethod === "HOME"}
-                    onChange={(e) => {
-                      setZasilkovnaMethod(e.target.value as ZasilkovnaMethod);
-                      setPickupPoint(null);
-                    }}
-                    disabled={loading}
-                  />
                   <div className="shipping-option-content">
-                    <div className="shipping-details">
-                      <span className="shipping-name">🏠 Home Delivery</span>
-                      <span className="shipping-desc">Direct to address</span>
+                    <div className="shipping-left">
+                      <input
+                        type="radio"
+                        name="zasilkovnaMethod"
+                        value="HOME"
+                        checked={zasilkovnaMethod === "HOME"}
+                        onChange={(e) => {
+                          setZasilkovnaMethod(e.target.value as ZasilkovnaMethod);
+                          setPickupPoint(null);
+                        }}
+                        disabled={loading}
+                      />
+                      <div className="shipping-details">
+                        <span className="shipping-name">Home Delivery</span>
+                        <span className="shipping-desc">Direct to address</span>
+                      </div>
                     </div>
                     <span className="shipping-price">25.00 ₽</span>
                   </div>
                 </label>
 
                 <label className="shipping-option">
-                  <input
-                    type="radio"
-                    name="zasilkovnaMethod"
-                    value="CARRIER_PICKUP"
-                    checked={zasilkovnaMethod === "CARRIER_PICKUP"}
-                    onChange={(e) => {
-                      setZasilkovnaMethod(e.target.value as ZasilkovnaMethod);
-                      setPickupPoint(null);
-                    }}
-                    disabled={loading}
-                  />
                   <div className="shipping-option-content">
-                    <div className="shipping-details">
-                      <span className="shipping-name">🚚 Carrier Pick-up</span>
-                      <span className="shipping-desc">External carrier locations</span>
+                    <div className="shipping-left">
+                      <input
+                        type="radio"
+                        name="zasilkovnaMethod"
+                        value="CARRIER_PICKUP"
+                        checked={zasilkovnaMethod === "CARRIER_PICKUP"}
+                        onChange={(e) => {
+                          setZasilkovnaMethod(e.target.value as ZasilkovnaMethod);
+                          setPickupPoint(null);
+                        }}
+                        disabled={loading}
+                      />
+                      <div className="shipping-details">
+                        <span className="shipping-name">Carrier Pick-up</span>
+                        <span className="shipping-desc">External carrier locations</span>
+                      </div>
                     </div>
                     <span className="shipping-price">15.00 ₽</span>
                   </div>
@@ -356,7 +364,7 @@ const CheckoutPage: React.FC = () => {
             <div className="shipping-method-section">
               <h3>Step 2: Choose Delivery Method</h3>
               <div className="coming-soon-message">
-                <p>🚧 Other delivery providers coming soon!</p>
+                <p>Other delivery providers coming soon!</p>
                 <p>Please select Zásilkovna for now.</p>
               </div>
             </div>
@@ -369,6 +377,7 @@ const CheckoutPage: React.FC = () => {
                 apiKey={import.meta.env.VITE_ZASILKOVNA_API_KEY || ""}
                 country={formData.country}
                 language="en"
+                deliveryMethod={zasilkovnaMethod}
                 onSelect={setPickupPoint}
               />
             </div>
