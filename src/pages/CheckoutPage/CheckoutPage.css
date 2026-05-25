@@ -309,6 +309,38 @@
   text-align: center;
 }
 
+.loading-message {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+}
+
+.free-shipping-banner {
+  background: #fff3cd;
+  border: 2px solid #ffc107;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.free-shipping-banner p {
+  margin: 0;
+  color: #856404;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.free-shipping-banner.active {
+  background: #d4edda;
+  border-color: #28a745;
+}
+
+.free-shipping-banner.active p {
+  color: #155724;
+}
+
 .payment-options {
   display: flex;
   gap: 12px;

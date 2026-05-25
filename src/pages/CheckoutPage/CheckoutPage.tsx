@@ -4,7 +4,26 @@ import { ZasilkovnaPickupSelector, type PickupPoint } from "@/components/Zasilko
 import "./CheckoutPage.css";
 
 type ShippingProvider = "ZASILKOVNA" | "OTHER";
-type ZasilkovnaMethod = "PICKUP" | "ZBOX" | "HOME" | "CARRIER_PICKUP";
+
+type ShippingOption = {
+  method: string;
+  name: string;
+  description: string;
+  cost: number;
+  provider: string;
+  available: boolean;
+};
+
+type FreeShippingInfo = {
+  enabled: boolean;
+  threshold: number;
+  remaining: number;
+};
+
+type Country = {
+  code: string;
+  name: string;
+};
 
 type FormData = {
   firstName: string;
@@ -30,36 +49,99 @@ const CheckoutPage: React.FC = () => {
     country: "CZ",
   });
   const [shippingProvider, setShippingProvider] = useState<ShippingProvider>("ZASILKOVNA");
-  const [zasilkovnaMethod, setZasilkovnaMethod] = useState<ZasilkovnaMethod>("PICKUP");
+  const [selectedMethod, setSelectedMethod] = useState<string>("");
   const [pickupPoint, setPickupPoint] = useState<PickupPoint | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>([]);
+  const [freeShippingInfo, setFreeShippingInfo] = useState<FreeShippingInfo | null>(null);
+  const [loadingShipping, setLoadingShipping] = useState(false);
+  const [countries, setCountries] = useState<Country[]>([]);
 
   const itemsTotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
   
-  // Shipping costs based on provider and method
-  const getShippingCost = () => {
-    if (shippingProvider === "ZASILKOVNA") {
-      switch (zasilkovnaMethod) {
-        case "PICKUP": return 12.00;
-        case "ZBOX": return 10.00;
-        case "HOME": return 25.00;
-        case "CARRIER_PICKUP": return 15.00;
-        default: return 0;
+  // Load countries on mount
+  React.useEffect(() => {
+    const loadCountries = async () => {
+      try {
+        const response = await fetch('/api/shipping/countries');
+        if (response.ok) {
+          const data = await response.json();
+          setCountries(data);
+        } else {
+          // Fallback to default countries
+          setCountries([
+            { code: "CZ", name: "Czech Republic" },
+            { code: "SK", name: "Slovakia" },
+            { code: "PL", name: "Poland" },
+            { code: "HU", name: "Hungary" },
+            { code: "RO", name: "Romania" },
+          ]);
+        }
+      } catch (err) {
+        console.error('Failed to load countries:', err);
+        // Fallback
+        setCountries([
+          { code: "CZ", name: "Czech Republic" },
+          { code: "SK", name: "Slovakia" },
+        ]);
+      } finally {
+        // Countries loaded
       }
-    }
-    return 0; // OTHER provider - to be implemented
+    };
+    
+    loadCountries();
+  }, []);
+  
+  // Load shipping options when country changes
+  React.useEffect(() => {
+    const loadShippingOptions = async () => {
+      if (!formData.country || itemsTotal === 0) return;
+      
+      setLoadingShipping(true);
+      try {
+        const response = await fetch(
+          `/api/shipping/options?country=${formData.country}&orderTotal=${itemsTotal}`
+        );
+        
+        if (!response.ok) {
+          throw new Error('Failed to load shipping options');
+        }
+        
+        const data = await response.json();
+        setShippingOptions(data.methods || []);
+        setFreeShippingInfo(data.freeShippingInfo || null);
+        
+        // Select first available option
+        const firstAvailable = data.methods?.find((opt: ShippingOption) => opt.available);
+        if (firstAvailable) {
+          setSelectedMethod(firstAvailable.method);
+        }
+      } catch (err) {
+        console.error('Failed to load shipping options:', err);
+        setShippingOptions([]);
+        setFreeShippingInfo(null);
+      } finally {
+        setLoadingShipping(false);
+      }
+    };
+    
+    loadShippingOptions();
+  }, [formData.country, itemsTotal]);
+  
+  // Get shipping cost from loaded options
+  const getShippingCost = () => {
+    const option = shippingOptions.find(opt => opt.method === selectedMethod);
+    return option?.cost || 0;
   };
   
   const shippingCost = getShippingCost();
   const total = itemsTotal + shippingCost;
   
-  const needsPickupPoint = shippingProvider === "ZASILKOVNA" && 
-    (zasilkovnaMethod === "PICKUP" || zasilkovnaMethod === "ZBOX" || zasilkovnaMethod === "CARRIER_PICKUP");
-  
-  const needsAddress = shippingProvider === "OTHER" || (shippingProvider === "ZASILKOVNA" && zasilkovnaMethod === "HOME");
+  const needsPickupPoint = ['PICKUP', 'ZBOX', 'CARRIER_PICKUP'].includes(selectedMethod);
+  const needsAddress = selectedMethod === 'HOME';
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -109,29 +191,28 @@ const CheckoutPage: React.FC = () => {
 
       const shippingInfo = needsPickupPoint && pickupPoint
         ? {
-            provider: shippingProvider,
-            method: zasilkovnaMethod,
+            method: selectedMethod,
             cost: shippingCost,
+            provider: shippingOptions.find(opt => opt.method === selectedMethod)?.provider || "ZASILKOVNA",
             pickupPointId: pickupPoint.id,
             pickupPointName: pickupPoint.name,
             pickupPointAddress: pickupPoint.address,
           }
         : {
-            provider: shippingProvider,
-            method: shippingProvider === "ZASILKOVNA" ? zasilkovnaMethod : "STANDARD",
+            method: selectedMethod,
             cost: shippingCost,
+            provider: shippingOptions.find(opt => opt.method === selectedMethod)?.provider || "ZASILKOVNA",
           };
 
       const response = await fetch("/api/orders/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          customerInfo,
           items: items.map((item) => ({
-            productId: item.id,
+            itemId: item.id,
             quantity: item.qty,
-            price: item.price,
           })),
+          customerInfo,
           shippingInfo,
         }),
       });
@@ -140,7 +221,7 @@ const CheckoutPage: React.FC = () => {
         throw new Error(`Checkout failed: ${response.statusText}`);
       }
 
-      const { sessionUrl } = await response.json();
+      const { url } = await response.json();
       
       // Store order info in localStorage as fallback
       localStorage.setItem("lastOrder", JSON.stringify({
@@ -154,7 +235,7 @@ const CheckoutPage: React.FC = () => {
       }));
       
       // Redirect to Stripe Checkout
-      window.location.href = sessionUrl;
+      window.location.href = url;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create checkout session");
       setLoading(false);
@@ -224,6 +305,23 @@ const CheckoutPage: React.FC = () => {
             />
           </label>
 
+          <label>
+            Country *
+            <select
+              name="country"
+              value={formData.country}
+              onChange={handleChange}
+              required
+              disabled={loading}
+            >
+              {countries.map((country) => (
+                <option key={country.code} value={country.code}>
+                  {country.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
           {/* Shipping Provider Selection */}
           <div className="shipping-method-section">
             <h3>Step 1: Choose Shipping Provider</h3>
@@ -272,101 +370,52 @@ const CheckoutPage: React.FC = () => {
           {shippingProvider === "ZASILKOVNA" && (
             <div className="shipping-method-section">
               <h3>Step 2: Choose Delivery Method</h3>
-              <div className="shipping-options">
-                
-                <label className="shipping-option">
-                  <div className="shipping-option-content">
-                    <div className="shipping-left">
-                      <input
-                        type="radio"
-                        name="zasilkovnaMethod"
-                        value="PICKUP"
-                        checked={zasilkovnaMethod === "PICKUP"}
-                        onChange={(e) => {
-                          setZasilkovnaMethod(e.target.value as ZasilkovnaMethod);
-                          setPickupPoint(null);
-                        }}
-                        disabled={loading}
-                      />
-                      <div className="shipping-details">
-                        <span className="shipping-name">Pick-up Point</span>
-                        <span className="shipping-desc">Physical location, COD available</span>
+              
+              {/* Free Shipping Info */}
+              {freeShippingInfo?.enabled && (
+                <div className={`free-shipping-banner ${freeShippingInfo.remaining === 0 ? 'active' : ''}`}>
+                  {freeShippingInfo.remaining === 0 ? (
+                    <p>🎉 Free shipping activated!</p>
+                  ) : (
+                    <p>Add {freeShippingInfo.remaining.toFixed(2)} CZK more for free shipping!</p>
+                  )}
+                </div>
+              )}
+              
+              {loadingShipping ? (
+                <p className="loading-message">Loading shipping options...</p>
+              ) : shippingOptions.length === 0 ? (
+                <p className="error-message">No shipping options available for selected country</p>
+              ) : (
+                <div className="shipping-options">
+                  {shippingOptions.map((option) => (
+                    <label key={option.method} className="shipping-option">
+                      <div className="shipping-option-content">
+                        <div className="shipping-left">
+                          <input
+                            type="radio"
+                            name="shippingMethod"
+                            value={option.method}
+                            checked={selectedMethod === option.method}
+                            onChange={(e) => {
+                              setSelectedMethod(e.target.value);
+                              setPickupPoint(null);
+                            }}
+                            disabled={loading || !option.available}
+                          />
+                          <div className="shipping-details">
+                            <span className="shipping-name">{option.name}</span>
+                            <span className="shipping-desc">{option.description}</span>
+                          </div>
+                        </div>
+                        <span className="shipping-price">
+                          {option.cost === 0 ? 'FREE' : `${option.cost.toFixed(2)} CZK`}
+                        </span>
                       </div>
-                    </div>
-                    <span className="shipping-price">12.00 ₽</span>
-                  </div>
-                </label>
-
-                <label className="shipping-option">
-                  <div className="shipping-option-content">
-                    <div className="shipping-left">
-                      <input
-                        type="radio"
-                        name="zasilkovnaMethod"
-                        value="ZBOX"
-                        checked={zasilkovnaMethod === "ZBOX"}
-                        onChange={(e) => {
-                          setZasilkovnaMethod(e.target.value as ZasilkovnaMethod);
-                          setPickupPoint(null);
-                        }}
-                        disabled={loading}
-                      />
-                      <div className="shipping-details">
-                        <span className="shipping-name">Z-BOX (24/7)</span>
-                        <span className="shipping-desc">Automated locker</span>
-                      </div>
-                    </div>
-                    <span className="shipping-price">10.00 ₽</span>
-                  </div>
-                </label>
-
-                <label className="shipping-option">
-                  <div className="shipping-option-content">
-                    <div className="shipping-left">
-                      <input
-                        type="radio"
-                        name="zasilkovnaMethod"
-                        value="HOME"
-                        checked={zasilkovnaMethod === "HOME"}
-                        onChange={(e) => {
-                          setZasilkovnaMethod(e.target.value as ZasilkovnaMethod);
-                          setPickupPoint(null);
-                        }}
-                        disabled={loading}
-                      />
-                      <div className="shipping-details">
-                        <span className="shipping-name">Home Delivery</span>
-                        <span className="shipping-desc">Direct to address</span>
-                      </div>
-                    </div>
-                    <span className="shipping-price">25.00 ₽</span>
-                  </div>
-                </label>
-
-                <label className="shipping-option">
-                  <div className="shipping-option-content">
-                    <div className="shipping-left">
-                      <input
-                        type="radio"
-                        name="zasilkovnaMethod"
-                        value="CARRIER_PICKUP"
-                        checked={zasilkovnaMethod === "CARRIER_PICKUP"}
-                        onChange={(e) => {
-                          setZasilkovnaMethod(e.target.value as ZasilkovnaMethod);
-                          setPickupPoint(null);
-                        }}
-                        disabled={loading}
-                      />
-                      <div className="shipping-details">
-                        <span className="shipping-name">Carrier Pick-up</span>
-                        <span className="shipping-desc">External carrier locations</span>
-                      </div>
-                    </div>
-                    <span className="shipping-price">15.00 ₽</span>
-                  </div>
-                </label>
-
-              </div>
+                    </label>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -388,7 +437,7 @@ const CheckoutPage: React.FC = () => {
                 apiKey={import.meta.env.VITE_ZASILKOVNA_API_KEY || ""}
                 country={formData.country}
                 language="en"
-                deliveryMethod={zasilkovnaMethod}
+                deliveryMethod={selectedMethod as any}
                 onSelect={setPickupPoint}
               />
             </div>
