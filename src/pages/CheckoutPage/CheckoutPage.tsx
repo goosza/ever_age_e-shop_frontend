@@ -209,7 +209,7 @@ const CheckoutPage: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           items: items.map((item) => ({
-            itemId: item.id,
+            itemUuid: item.id,
             quantity: item.qty,
           })),
           customerInfo,
