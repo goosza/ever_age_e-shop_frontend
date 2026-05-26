@@ -221,7 +221,7 @@ const CheckoutPage: React.FC = () => {
         throw new Error(`Checkout failed: ${response.statusText}`);
       }
 
-      const { url } = await response.json();
+      const { sessionUrl } = await response.json();
       
       // Store order info in localStorage as fallback
       localStorage.setItem("lastOrder", JSON.stringify({
@@ -235,7 +235,7 @@ const CheckoutPage: React.FC = () => {
       }));
       
       // Redirect to Stripe Checkout
-      window.location.href = url;
+      window.location.href = sessionUrl;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create checkout session");
       setLoading(false);
