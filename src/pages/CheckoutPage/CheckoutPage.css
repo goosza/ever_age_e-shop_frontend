@@ -202,6 +202,12 @@
   transition: all 0.2s ease;
 }
 
+/* Override .checkout-form label styles for shipping options */
+.checkout-form .shipping-option {
+  margin-bottom: 0;
+  font-size: inherit;
+}
+
 .shipping-option:hover {
   border-color: #333;
   background: #f8f8f8;
@@ -232,14 +238,6 @@
 
 .shipping-option input[type="radio"]:checked + .shipping-option-content {
   color: inherit;
-}
-
-.shipping-option-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex: 1;
-  gap: 12px;
 }
 
 .shipping-details {

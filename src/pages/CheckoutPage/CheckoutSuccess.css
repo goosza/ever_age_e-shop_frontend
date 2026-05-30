@@ -49,6 +49,11 @@
   color: white;
 }
 
+.pending-icon {
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  color: white;
+}
+
 @keyframes scaleIn {
   from {
     transform: scale(0);
@@ -60,7 +65,7 @@
   }
 }
 
-/* Loading spinner */
+/* Loading */
 .spinner {
   width: 48px;
   height: 48px;
@@ -69,6 +74,19 @@
   border-radius: 50%;
   margin: 0 auto 20px;
   animation: spin 1s linear infinite;
+}
+
+.loading-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 8px 0;
+}
+
+.loading-sub {
+  font-size: 0.9rem;
+  color: #718096;
+  margin: 0;
 }
 
 @keyframes spin {
@@ -169,8 +187,29 @@
   font-size: 0.95rem;
 }
 
-/* Next Steps */
-.next-steps {
+/* Shipping Details - only on success page */
+.result-container .shipping-details {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.result-container .shipping-details h3 {
+  font-size: 1.1rem;
+  margin: 0 0 12px 0;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.info-value a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.info-value a:hover {
+  text-decoration: underline;
+}
   margin: 32px 0;
 }
 
