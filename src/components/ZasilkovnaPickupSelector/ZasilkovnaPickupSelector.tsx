@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import './ZasilkovnaPickupSelector.css';
 
 export interface PickupPoint {
@@ -17,13 +17,12 @@ interface Props {
   onSelect: (point: PickupPoint | null) => void;
 }
 
-// Extend Window interface for Packeta
 declare global {
   interface Window {
     Packeta?: {
       Widget: {
-        pick: (apiKey: string, callback: (point: any) => void, options: any) => void;
-        open: () => void;
+        pick: (apiKey: string, callback: (point: any) => void, options: any, element?: HTMLElement | null) => void;
+        close: () => void;
       };
     };
   }
@@ -37,187 +36,132 @@ export function ZasilkovnaPickupSelector({
   onSelect 
 }: Props) {
   const [selectedPoint, setSelectedPoint] = useState<PickupPoint | null>(null);
-  const [widgetReady, setWidgetReady] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [userInteracted, setUserInteracted] = useState(false);
-  const [pendingOpen, setPendingOpen] = useState(false);
-  
+  const widgetContainerRef = useRef<HTMLDivElement>(null);
+
+  // Close modal on Escape
   useEffect(() => {
-    // Only check widget readiness after user has interacted
-    if (!userInteracted) {
-      console.log('ℹ️ Waiting for user interaction before checking widget...');
-      return;
-    }
-    
-    // Check if widget is loaded
-    const checkWidget = () => {
-      if (typeof window !== 'undefined' && window.Packeta) {
-        console.log('✅ Zasilkovna widget loaded successfully');
-        setWidgetReady(true);
-        setError(null);
-      } else {
-        console.warn('⚠️ Zasilkovna widget not loaded yet');
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isModalOpen) {
+        closeModal();
       }
     };
-    
-    // Check immediately
-    checkWidget();
-    
-    // Also check after delays
-    const timer1 = setTimeout(checkWidget, 500);
-    const timer2 = setTimeout(checkWidget, 1000);
-    const timer3 = setTimeout(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isModalOpen]);
+
+  // Render widget into container when modal opens
+  useEffect(() => {
+    if (!isModalOpen) return;
+
+    // Wait for DOM to render the container
+    const timer = setTimeout(() => {
       if (!window.Packeta) {
-        console.error('❌ Zasilkovna widget failed to load');
-        setError('Failed to load widget. Please refresh the page.');
+        setError('Widget failed to load. Please refresh the page.');
+        return;
       }
-    }, 3000);
-    
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-    };
-  }, [userInteracted]);
-  
-  // Open widget when it becomes ready and user has requested it
-  useEffect(() => {
-    if (widgetReady && pendingOpen) {
-      setPendingOpen(false);
-      actuallyOpenWidget();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [widgetReady, pendingOpen]);
-  
-  const actuallyOpenWidget = () => {
-    if (!window.Packeta) {
-      console.error('❌ Widget not available');
+
+      if (!widgetContainerRef.current) return;
+
+      const widgetOptions: any = {
+        country,
+        language,
+        vendors: [],
+      };
+
+      if (deliveryMethod === 'ZBOX') {
+        widgetOptions.vendors.push({ country, group: 'zbox' });
+      } else {
+        widgetOptions.vendors.push({ country });
+      }
+
+      try {
+        window.Packeta!.Widget.pick(
+          apiKey,
+          (point: any) => {
+            if (point) {
+              const pickupPoint: PickupPoint = {
+                id: point.id,
+                name: point.name,
+                address: `${point.street} ${point.houseNumber ?? ''}`.trim(),
+                city: point.city,
+                postalCode: point.zip,
+              };
+              setSelectedPoint(pickupPoint);
+              onSelect(pickupPoint);
+            }
+            closeModal();
+          },
+          widgetOptions,
+          widgetContainerRef.current
+        );
+      } catch (err) {
+        console.error('Widget error:', err);
+        setError('Failed to open widget. Please try again.');
+      }
+    }, 50);
+
+    return () => clearTimeout(timer);
+  }, [isModalOpen]);
+
+  const openModal = () => {
+    if (!apiKey) {
+      setError('API key is not configured.');
       return;
     }
-    
-    // Determine widget options based on delivery method
-    const widgetOptions: any = {
-      country: country,
-      language: language,
-      vendors: []
-    };
-    
-    // Configure vendors based on delivery method
-    if (deliveryMethod === 'ZBOX') {
-      // Z-BOX: automated lockers
-      console.log('� Opening widget for Z-BOX (automated lockers)');
-      widgetOptions.vendors.push({
-        country: country,
-        group: 'zbox'
-      });
-    } else if (deliveryMethod === 'PICKUP') {
-      // Regular pick-up points (zpoint)
-      console.log('📦 Opening widget for Pick-up Points');
-      widgetOptions.vendors.push({
-        country: country
-        // group is empty or omitted for regular pick-up points (zpoint)
-      });
-    } else if (deliveryMethod === 'CARRIER_PICKUP') {
-      // External carrier pick-up points
-      console.log('🚚 Opening widget for Carrier Pick-up Points');
-      widgetOptions.vendors.push({
-        country: country
-        // For carrier pickup, we show regular points
-        // In production, you might want to specify specific carrier IDs
-      });
-    }
-    
-    try {
-      console.log('📍 Calling Widget.pick() with options:', widgetOptions);
-      window.Packeta.Widget.pick(
-        apiKey,
-        (point: any) => {
-          if (point) {
-            console.log('✅ Pickup point selected:', point);
-            const pickupPoint: PickupPoint = {
-              id: point.id,
-              name: point.name,
-              address: `${point.street} ${point.houseNumber}`,
-              city: point.city,
-              postalCode: point.zip
-            };
-            
-            setSelectedPoint(pickupPoint);
-            onSelect(pickupPoint);
-          } else {
-            console.log('ℹ️ Pickup point selection cancelled');
-          }
-        },
-        widgetOptions
-      );
-    } catch (error) {
-      console.error('❌ Error opening Zasilkovna widget:', error);
-      alert('Failed to open pickup point selector. Please try again.');
-    }
+    setError(null);
+    setIsModalOpen(true);
   };
-  
-  const openWidget = () => {
-    console.log('🔍 User clicked to open Zasilkovna widget...');
-    
-    // Mark that user has interacted (triggers widget loading check)
-    if (!userInteracted) {
-      setUserInteracted(true);
+
+  const closeModal = () => {
+    if (window.Packeta) {
+      try { window.Packeta.Widget.close(); } catch {}
     }
-    
-    if (!apiKey || apiKey === 'your_zasilkovna_api_key_here' || apiKey === 'c36a2b238a1e11e793e0cc47a283a4c') {
-      const msg = 'Zasilkovna API key is not configured. Please add your real API key to .env.local';
-      console.error('❌', msg);
-      alert(msg);
-      return;
-    }
-    
-    // If widget not ready yet, mark as pending
-    if (!widgetReady) {
-      console.log('⏳ Widget not ready yet, will open when ready...');
-      setPendingOpen(true);
-      setError(null);
-      return;
-    }
-    
-    // Widget is ready, open it now
-    actuallyOpenWidget();
+    setIsModalOpen(false);
   };
-  
+
   return (
-    <div className="zasilkovna-selector">
-      <h3 className="selector-title">Zasilkovna Pick-up Point</h3>
-      
-      {error && (
-        <p className="widget-error">{error}</p>
-      )}
-      
-      {selectedPoint ? (
-        <div className="selected-point">
-          <div className="point-info">
-            <p className="point-name">{selectedPoint.name}</p>
-            <p className="point-address">{selectedPoint.address}</p>
-            <p className="point-city">
-              {selectedPoint.city}, {selectedPoint.postalCode}
-            </p>
+    <>
+      <div className="zasilkovna-selector">
+        <h3 className="selector-title">Zásilkovna Pick-up Point</h3>
+
+        {error && <p className="widget-error">{error}</p>}
+
+        {selectedPoint ? (
+          <div className="selected-point">
+            <div className="point-info">
+              <p className="point-name">{selectedPoint.name}</p>
+              <p className="point-address">{selectedPoint.address}</p>
+              <p className="point-city">{selectedPoint.city}, {selectedPoint.postalCode}</p>
+            </div>
+            <button type="button" onClick={openModal} className="change-btn">
+              Change Pick-up Point
+            </button>
           </div>
-          <button 
-            type="button"
-            onClick={openWidget} 
-            className="change-btn"
-          >
-            Change Pick-up Point
+        ) : (
+          <button type="button" onClick={openModal} className="select-btn">
+            Select Pick-up Point
           </button>
+        )}
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="widget-modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}>
+          <div className="widget-modal">
+            <div className="widget-modal-header">
+              <h2>Select Pick-up Point</h2>
+              <button type="button" className="widget-modal-close" onClick={closeModal} aria-label="Close">
+                ✕
+              </button>
+            </div>
+            <div className="widget-modal-body">
+              <div ref={widgetContainerRef} className="widget-container" />
+            </div>
+          </div>
         </div>
-      ) : (
-        <button 
-          type="button"
-          onClick={openWidget} 
-          className="select-btn"
-          disabled={userInteracted && !widgetReady}
-        >
-          {userInteracted && !widgetReady ? 'Loading...' : 'Select Pick-up Point'}
-        </button>
       )}
-    </div>
+    </>
   );
 }
