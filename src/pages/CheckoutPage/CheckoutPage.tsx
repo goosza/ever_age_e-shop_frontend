@@ -57,6 +57,7 @@ const CheckoutPage: React.FC = () => {
   const [freeShippingInfo, setFreeShippingInfo] = useState<FreeShippingInfo | null>(null);
   const [loadingShipping, setLoadingShipping] = useState(false);
   const [countries, setCountries] = useState<Country[]>([]);
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; phone?: string }>({});
 
   const itemsTotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
   
@@ -141,9 +142,28 @@ const CheckoutPage: React.FC = () => {
   const needsPickupPoint = ['PICKUP', 'ZBOX', 'CARRIER_PICKUP'].includes(selectedMethod);
   const needsAddress = selectedMethod === 'HOME';
 
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email) ? undefined : "Enter a valid email address";
+  };
+
+  const validatePhone = (phone: string) => {
+    // E.164 format: + followed by 7–15 digits, or local 7–15 digit numbers
+    const re = /^\+?[0-9]{7,15}$/;
+    return re.test(phone.replace(/[\s\-()]/g, "")) ? undefined : "Enter a valid phone number (e.g. +420123456789)";
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Live validation for email and phone
+    if (name === "email") {
+      setFieldErrors((prev) => ({ ...prev, email: validateEmail(value) }));
+    }
+    if (name === "phone") {
+      setFieldErrors((prev) => ({ ...prev, phone: validatePhone(value) }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -151,6 +171,15 @@ const CheckoutPage: React.FC = () => {
     
     if (!formData.firstName || !formData.lastName || !formData.email) {
       setError("Please fill all required fields");
+      return;
+    }
+
+    const emailError = validateEmail(formData.email);
+    const phoneError = validatePhone(formData.phone);
+
+    if (emailError || phoneError) {
+      setFieldErrors({ email: emailError, phone: phoneError });
+      setError("Please fix the errors above");
       return;
     }
 
@@ -290,7 +319,9 @@ const CheckoutPage: React.FC = () => {
               onChange={handleChange}
               required
               disabled={loading}
+              className={fieldErrors.email ? "input-error" : ""}
             />
+            {fieldErrors.email && <span className="field-error">{fieldErrors.email}</span>}
           </label>
 
           <label>
@@ -302,7 +333,10 @@ const CheckoutPage: React.FC = () => {
               onChange={handleChange}
               required
               disabled={loading}
+              className={fieldErrors.phone ? "input-error" : ""}
+              placeholder="+420123456789"
             />
+            {fieldErrors.phone && <span className="field-error">{fieldErrors.phone}</span>}
           </label>
 
           <label>

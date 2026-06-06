@@ -48,7 +48,7 @@
 .checkout-form select {
   width: 100%;
   margin-top: 4px;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
   padding: 8px 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -56,6 +56,20 @@
   font: inherit;
   font-size: 0.95rem;
   height: 38px;
+}
+
+.checkout-form input.input-error,
+.checkout-form textarea.input-error {
+  border-color: #e53e3e;
+  background: #fff5f5;
+}
+
+.field-error {
+  display: block;
+  color: #e53e3e;
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+  margin-top: 2px;
 }
 
 .checkout-form textarea {
