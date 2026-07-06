@@ -58,13 +58,17 @@ const CheckoutSuccess: React.FC = () => {
 
         if (response.ok) {
           const orderData = await response.json();
+          // Save orderNumber for tracking, not the full session ID
+          if (orderData.orderNumber) {
+            sessionStorage.setItem("lastOrderNumber", orderData.orderNumber);
+          }
           setOrder(orderData);
           setStatus("success");
           return;
         }
 
-        // 404 — webhook ещё не пришёл, retry
         if (response.status === 404) {
+          // Webhook not yet delivered — retry
           if (attempt >= MAX_RETRIES) {
             setStatus("timeout");
             return;
@@ -75,7 +79,19 @@ const CheckoutSuccess: React.FC = () => {
           return;
         }
 
-        // Другая ошибка
+        if (response.status === 429) {
+          // Rate limited — wait longer before retry
+          if (attempt >= MAX_RETRIES) {
+            setStatus("timeout");
+            return;
+          }
+          setRetryCount(attempt + 1);
+          setStatus("retrying");
+          retryTimer.current = setTimeout(() => tryFetch(attempt + 1), 5000);
+          return;
+        }
+
+        // Other error
         setStatus("timeout");
       } catch {
         if (attempt >= MAX_RETRIES) {

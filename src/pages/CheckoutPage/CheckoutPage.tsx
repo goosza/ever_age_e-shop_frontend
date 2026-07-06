@@ -247,22 +247,15 @@ const CheckoutPage: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`Checkout failed: ${response.statusText}`);
+        const errorData = await response.json().catch(() => null);
+        if (response.status === 429) {
+          throw new Error("Too many requests. Please try again in a minute.");
+        }
+        throw new Error(errorData?.message || `Checkout failed (${response.status})`);
       }
 
       const { sessionUrl } = await response.json();
-      
-      // Store order info in localStorage as fallback
-      localStorage.setItem("lastOrder", JSON.stringify({
-        customerEmail: formData.email,
-        totalAmount: total,
-        items: items.map(item => ({
-          title: item.title,
-          quantity: item.qty,
-          price: item.price,
-        })),
-      }));
-      
+
       // Redirect to Stripe Checkout
       window.location.href = sessionUrl;
     } catch (err) {
