@@ -17,11 +17,31 @@ interface Props {
   onSelect: (point: PickupPoint | null) => void;
 }
 
+interface PacketaWidgetPoint {
+  id: string;
+  name: string;
+  street: string;
+  houseNumber?: string;
+  city: string;
+  zip: string;
+}
+
+interface PacketaWidgetOptions {
+  country: string;
+  language: string;
+  vendors: { country: string; group?: string }[];
+}
+
 declare global {
   interface Window {
     Packeta?: {
       Widget: {
-        pick: (apiKey: string, callback: (point: any) => void, options: any, element?: HTMLElement | null) => void;
+        pick: (
+          apiKey: string,
+          callback: (point: PacketaWidgetPoint | null) => void,
+          options: PacketaWidgetOptions,
+          element?: HTMLElement | null
+        ) => void;
         close: () => void;
       };
     };
@@ -64,7 +84,7 @@ export function ZasilkovnaPickupSelector({
 
       if (!widgetContainerRef.current) return;
 
-      const widgetOptions: any = {
+      const widgetOptions: PacketaWidgetOptions = {
         country,
         language,
         vendors: [],
@@ -79,7 +99,7 @@ export function ZasilkovnaPickupSelector({
       try {
         window.Packeta!.Widget.pick(
           apiKey,
-          (point: any) => {
+          (point: PacketaWidgetPoint | null) => {
             if (point) {
               const pickupPoint: PickupPoint = {
                 id: point.id,
@@ -116,7 +136,11 @@ export function ZasilkovnaPickupSelector({
 
   const closeModal = () => {
     if (window.Packeta) {
-      try { window.Packeta.Widget.close(); } catch {}
+      try {
+        window.Packeta.Widget.close();
+      } catch (err) {
+        console.warn('Failed to close Packeta widget cleanly:', err);
+      }
     }
     setIsModalOpen(false);
   };

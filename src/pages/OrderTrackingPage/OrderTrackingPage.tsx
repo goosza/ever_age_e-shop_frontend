@@ -33,7 +33,7 @@ const OrderTrackingPage: React.FC = () => {
 
       try {
         const orderData = await orderApi.trackOrder(orderNumber);
-        setOrder(orderData);
+        setOrder(orderData as OrderDetails);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load order");
       } finally {

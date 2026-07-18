@@ -25,7 +25,7 @@ export const productApi = {
 };
 
 export const orderApi = {
-    async getBySessionId(sessionId: string): Promise<any> {
+    async getBySessionId(sessionId: string): Promise<unknown> {
         const response = await fetch(`${API_BASE_URL}/orders/by-session/${sessionId}`);
         if (!response.ok) {
             const error = await response.text();
@@ -35,7 +35,7 @@ export const orderApi = {
         return response.json();
     },
 
-    async trackOrder(orderNumber: string): Promise<any> {
+    async trackOrder(orderNumber: string): Promise<unknown> {
         const response = await fetch(`${API_BASE_URL}/orders/track/${orderNumber}`);
         if (!response.ok) {
             const error = await response.text();

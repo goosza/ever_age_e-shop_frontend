@@ -464,7 +464,7 @@ const CheckoutPage: React.FC = () => {
                 apiKey={import.meta.env.VITE_ZASILKOVNA_API_KEY || ""}
                 country={formData.country}
                 language="en"
-                deliveryMethod={selectedMethod as any}
+                deliveryMethod={selectedMethod as 'PICKUP' | 'ZBOX' | 'CARRIER_PICKUP'}
                 onSelect={setPickupPoint}
               />
             </div>
