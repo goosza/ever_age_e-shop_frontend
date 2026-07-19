@@ -27,6 +27,7 @@ COPY --from=build /app/dist /usr/share/nginx/html
 
 # Copy custom nginx configuration as template
 COPY nginx.conf /etc/nginx/conf.d/default.conf.template
+COPY security-headers.conf /etc/nginx/conf.d/security-headers.conf
 
 # Expose port 80
 EXPOSE 80
