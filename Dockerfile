@@ -25,8 +25,10 @@ FROM nginx:1.25-alpine
 # Copy built files from build stage
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copy custom nginx configuration as template
-COPY nginx.conf /etc/nginx/conf.d/default.conf.template
+# Copy custom nginx configuration
+# (no envsubst needed — nginx.conf now proxies to the backend by its
+# docker-network service name, not by host IP/port env vars)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY security-headers.conf /etc/nginx/conf.d/security-headers.conf
 
 # Expose port 80
@@ -36,5 +38,4 @@ EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:80/health || exit 1
 
-# Substitute env vars and start nginx
-CMD ["/bin/sh", "-c", "envsubst '$SERVER_IP $BACKEND_PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+CMD ["nginx", "-g", "daemon off;"]
