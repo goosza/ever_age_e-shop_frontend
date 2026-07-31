@@ -60,6 +60,14 @@ export function ZasilkovnaPickupSelector({
   const [error, setError] = useState<string | null>(null);
   const widgetContainerRef = useRef<HTMLDivElement>(null);
 
+  // Keep the latest prop values in a ref so the widget-open effect below can
+  // read them without re-running (and re-invoking the widget) on every prop
+  // change — that effect should only fire when the modal opens or closes.
+  const propsRef = useRef({ apiKey, country, language, deliveryMethod, onSelect });
+  useEffect(() => {
+    propsRef.current = { apiKey, country, language, deliveryMethod, onSelect };
+  }, [apiKey, country, language, deliveryMethod, onSelect]);
+
   // Close modal on Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -83,6 +91,8 @@ export function ZasilkovnaPickupSelector({
       }
 
       if (!widgetContainerRef.current) return;
+
+      const { apiKey, country, language, deliveryMethod, onSelect } = propsRef.current;
 
       const widgetOptions: PacketaWidgetOptions = {
         country,
@@ -123,6 +133,8 @@ export function ZasilkovnaPickupSelector({
     }, 50);
 
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: only
+    // re-run on isModalOpen changes; reads latest props via propsRef (see above)
   }, [isModalOpen]);
 
   const openModal = () => {
