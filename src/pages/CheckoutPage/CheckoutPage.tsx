@@ -461,7 +461,7 @@ const CheckoutPage: React.FC = () => {
           {needsPickupPoint && (
             <div className="zasilkovna-section">
               <ZasilkovnaPickupSelector
-                apiKey={import.meta.env.VITE_ZASILKOVNA_API_KEY || ""}
+                apiKey={(window as any)._env_?.VITE_ZASILKOVNA_API_KEY ?? ""}
                 country={formData.country}
                 language="en"
                 deliveryMethod={selectedMethod as 'PICKUP' | 'ZBOX' | 'CARRIER_PICKUP'}
